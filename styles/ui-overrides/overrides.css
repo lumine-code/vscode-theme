@@ -19,7 +19,7 @@
     background-clip: border-box;
   }
 
-  atom-text-editor {
+  lumine-text-editor {
     ::-webkit-scrollbar-track,
     ::-webkit-scrollbar-corner {
       background: transparent;
@@ -31,7 +31,7 @@
   background: var(--scrollbar-color-hover);
 }
 
-.scrollbars-visible-always atom-text-editor ::-webkit-scrollbar-thumb:hover {
+.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-color-editor-hover);
 }
 
@@ -136,14 +136,14 @@
   --select-list-separator-inset: calc(var(--ui-padding) / 1.5);
 }
 
-atom-panel.modal {
+lumine-panel.modal {
   max-width: min(92vw, calc(var(--ui-size) * 50));
 
   &.from-top {
     top: var(--component-padding);
   }
 
-  atom-text-editor[mini] {
+  lumine-text-editor[mini] {
     margin-bottom: calc(var(--ui-padding) / 3);
   }
 
@@ -229,8 +229,8 @@ atom-panel.modal {
   }
 }
 
-atom-pane-axis > atom-pane.active,
-atom-pane-container > atom-pane.pane {
+lumine-pane-axis > lumine-pane.active,
+lumine-pane-container > lumine-pane.pane {
   .tab.active::before {
     right: 0;
     bottom: auto;
@@ -247,7 +247,7 @@ atom-pane-container > atom-pane.pane {
     max-width: 23.1em;
   }
 
-  atom-dock & {
+  lumine-dock & {
     .tab,
     .tab.active {
       max-width: none;
