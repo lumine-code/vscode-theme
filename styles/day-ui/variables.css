@@ -10,7 +10,7 @@
 
 :root {
   --text-color: #3b3b3b;
-  --text-color-subtle: #767676;
+  --text-color-subtle: #616161;
   --text-color-highlight: #1f1f1f;
   --text-color-selected: #000000;
   --text-color-info: #005fb8;
@@ -21,8 +21,10 @@
   --background-color-success: #107c10;
   --background-color-warning: #986f0b;
   --background-color-error: #cd3131;
-  --background-color-highlight: #e8e8e8;
+  --background-color-highlight: #f2f2f2;
   --background-color-selected: #e4e6f1;
+  --list-background-color-selected-focus: #e8e8e8;
+  --list-text-color-selected-focus: #000000;
   --app-background-color: #f8f8f8;
   --base-background-color: #ffffff;
   --base-border-color: #e5e5e5;
@@ -39,9 +41,10 @@
   --overlay-background-color: #f8f8f8;
   --overlay-border-color: #cecece;
   --button-background-color: #e5e5e5;
-  --button-background-color-hover: #dadada;
+  --button-background-color-hover: #cccccc;
+  --button-primary-background-color-hover: #0258a8;
   --button-background-color-selected: #005fb8;
-  --button-border-color: rgba(0, 0, 0, 0.09);
+  --button-border-color: rgba(0, 0, 0, 0.1);
   --tab-bar-background-color: #f8f8f8;
   --tab-bar-border-color: #e5e5e5;
   --tab-background-color: #f8f8f8;
@@ -85,7 +88,8 @@
   --accent-bg-color: #005fb8;
   --accent-bg-text-color: #ffffff;
   --accent-only-text-color: #005fb8;
-  --badge-background-color: #d5d5d5;
+  --badge-background-color: #cccccc;
+  --badge-text-color: #3b3b3b;
   --button-text-color-selected: #ffffff;
   --button-border-color-selected: #005fb8;
   --checkbox-background-color: rgba(0, 95, 184, 0.25);
@@ -98,7 +102,7 @@
   --scrollbar-color-editor: rgba(100, 100, 100, 0.16);
   --scrollbar-color-editor-hover: rgba(100, 100, 100, 0.27);
   --scrollbar-background-color-editor: #ffffff;
-  --tab-text-color: #6f6f6f;
+  --tab-text-color: #868686;
   --tab-text-color-active: #3b3b3b;
   --tab-text-color-editor: #3b3b3b;
   --tab-background-color-editor: #ffffff;

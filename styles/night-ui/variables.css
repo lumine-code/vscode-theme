@@ -23,6 +23,8 @@
   --background-color-error: #b42318;
   --background-color-highlight: #2a2d2e;
   --background-color-selected: #37373d;
+  --list-background-color-selected-focus: #04395e;
+  --list-text-color-selected-focus: #ffffff;
   --app-background-color: #181818;
   --base-background-color: #1f1f1f;
   --base-border-color: #2b2b2b;
@@ -38,10 +40,11 @@
   --panel-heading-border-color: #2b2b2b;
   --overlay-background-color: #222222;
   --overlay-border-color: #3c3c3c;
-  --button-background-color: #313131;
-  --button-background-color-hover: #3c3c3c;
+  --button-background-color: rgba(0, 0, 0, 0);
+  --button-background-color-hover: #2b2b2b;
+  --button-primary-background-color-hover: #026ec1;
   --button-background-color-selected: #04395e;
-  --button-border-color: rgba(255, 255, 255, 0.07);
+  --button-border-color: rgba(255, 255, 255, 0.1);
   --tab-bar-background-color: #181818;
   --tab-bar-border-color: #2b2b2b;
   --tab-background-color: #181818;
@@ -86,6 +89,7 @@
   --accent-bg-text-color: #ffffff;
   --accent-only-text-color: #4daafc;
   --badge-background-color: #616161;
+  --badge-text-color: #f8f8f8;
   --button-text-color-selected: #ffffff;
   --button-border-color-selected: rgba(255, 255, 255, 0.07);
   --checkbox-background-color: rgba(0, 120, 212, 0.33);

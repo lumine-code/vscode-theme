@@ -45,6 +45,10 @@
     background-color: var(--button-background-color-hover);
     background-image: none;
   }
+
+  &:active:not(.selected, .btn-primary, .btn-info, .btn-success, .btn-warning, .btn-error) {
+    background: var(--button-background-color-hover);
+  }
 }
 
 .btn.btn-default {
@@ -54,30 +58,39 @@
     background-color: var(--button-background-color-hover);
     background-image: none;
   }
+
+  &:active:not(.selected) {
+    background: var(--button-background-color-hover);
+  }
 }
 
 .btn.btn-primary {
   --btn-variant-background: var(--accent-bg-color);
+  --btn-variant-background-hover: var(--button-primary-background-color-hover);
   --btn-variant-text: var(--accent-bg-text-color);
 }
 
 .btn.btn-info {
   --btn-variant-background: var(--background-color-info);
+  --btn-variant-background-hover: var(--button-primary-background-color-hover);
   --btn-variant-text: var(--text-color-on-info);
 }
 
 .btn.btn-success {
   --btn-variant-background: var(--background-color-success);
+  --btn-variant-background-hover: hsl(from var(--background-color-success) h s calc(l - 4));
   --btn-variant-text: var(--text-color-on-success);
 }
 
 .btn.btn-warning {
   --btn-variant-background: var(--background-color-warning);
+  --btn-variant-background-hover: hsl(from var(--background-color-warning) h s calc(l - 4));
   --btn-variant-text: var(--text-color-on-warning);
 }
 
 .btn.btn-error {
   --btn-variant-background: var(--background-color-error);
+  --btn-variant-background-hover: hsl(from var(--background-color-error) h s calc(l - 4));
   --btn-variant-text: var(--text-color-on-error);
 }
 
@@ -88,7 +101,7 @@
 
   &:hover {
     color: var(--btn-variant-text);
-    background-color: hsl(from var(--btn-variant-background) h s calc(l + 4));
+    background-color: var(--btn-variant-background-hover);
     background-image: none;
   }
 
@@ -98,6 +111,12 @@
     background-clip: border-box;
     box-shadow: 0 0 0 1px var(--btn-variant-background);
   }
+}
+
+/* Badges */
+
+.badge {
+  color: var(--badge-text-color);
 }
 
 .btn-group > .btn {
@@ -190,14 +209,34 @@ lumine-panel.modal {
   background-color: var(--background-color-highlight);
 }
 
+/* Lists */
+
+.list-group:focus,
+.list-tree:focus,
+.select-list {
+  --background-color-selected: var(--list-background-color-selected-focus);
+  --text-color-highlight: var(--list-text-color-selected-focus);
+}
+
+.tree-view:focus {
+  --button-background-color-selected: var(--list-background-color-selected-focus);
+  --accent-bg-text-color: var(--list-text-color-selected-focus);
+}
+
 /* Panels */
 
-.panel-heading .btn {
-  background-image: none;
-
-  &:hover {
-    background-color: hsl(from var(--button-background-color-hover) h s calc(l + 10));
+.panel-heading {
+  .btn {
     background-image: none;
+  }
+
+  .btn:not(.btn-primary, .btn-info, .btn-success, .btn-warning, .btn-error) {
+    background-color: var(--button-background-color);
+
+    &:hover {
+      background-color: var(--button-background-color-hover);
+      background-image: none;
+    }
   }
 }
 
@@ -236,7 +275,12 @@ lumine-pane-container > lumine-pane.pane {
     bottom: auto;
     width: auto;
     height: 1px;
+    background: var(--tab-border-color);
   }
+}
+
+.pane:focus-within .tab.active::before {
+  background: var(--accent-color);
 }
 
 .tab-bar {

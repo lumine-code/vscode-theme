@@ -10,16 +10,16 @@
  */
 
 :root {
-  --syntax-text-color: #d4d4d4;
+  --syntax-text-color: #cccccc;
   --syntax-cursor-color: #aeafad;
-  --syntax-selection-color: rgba(38, 79, 120, 0.5);
+  --syntax-selection-color: #264f78;
   --syntax-selection-flash-color: #0078d4;
   --syntax-background-color: #1f1f1f;
-  --wrap-guide-color: rgba(212, 212, 212, 0.06);
+  --wrap-guide-color: #5a5a5a;
   --indent-guide-color: #404040;
-  --indent-guide-stack-color: #4f4f4f;
-  --indent-guide-active-color: rgba(0, 120, 212, 0.18);
-  --syntax-invisible-character-color: rgba(212, 212, 212, 0.16);
+  --indent-guide-stack-color: #707070;
+  --indent-guide-active-color: #707070;
+  --syntax-invisible-character-color: #e3e4e229;
   --syntax-result-marker-color: rgba(234, 92, 0, 0.33);
   --syntax-result-marker-color-selected: #0078d4;
   --syntax-gutter-text-color: #6e7681;
@@ -44,6 +44,24 @@
   --syntax-color-snippet: #ce9178;
   --syntax-color-string: #ce9178;
   --syntax-color-comment: #6a9955;
+  --syntax-color-storage: #569cd6;
+  --syntax-color-language-constant: #569cd6;
+  --syntax-color-regexp: #d16969;
+  --syntax-color-escape: #d7ba7d;
+  --syntax-color-css-property: #9cdcfe;
+  --syntax-color-css-selector: #d7ba7d;
+  --syntax-color-css-value: #ce9178;
+  --syntax-color-enum: #4fc1ff;
+  --syntax-color-language-variable: #569cd6;
+  --syntax-color-label: #c8c8c8;
+  --syntax-color-markup-heading: #569cd6;
+  --syntax-color-markup-list: #6796e6;
+  --syntax-color-markup-quote-punctuation: #6a9955;
+  --syntax-color-markup-bold: #569cd6;
+  --syntax-color-markup-italic: #c586c0;
+  --syntax-color-markup-raw: #ce9178;
+  --syntax-color-markup-link: #569cd6;
+  --syntax-color-markup-changed: #569cd6;
   --terminal-selection-background-color: #264f78;
   --terminal-selection-text-color: #cccccc;
   --terminal-cursor-color: #aeafad;
@@ -67,18 +85,21 @@
   --terminal-color-bright-white: #e5e5e5;
   --mono-1: #d4d4d4;
   --mono-2: #9d9d9d;
-  --mono-3: #6e7681;
+  --mono-3: #6a9955;
   --hue-1: #4ec9b0;
-  --hue-2: #569cd6;
+  --hue-2: #dcdcaa;
   --hue-3: #c586c0;
-  --hue-4: #6a9955;
-  --hue-5: #f44747;
-  --hue-5-2: #d16969;
-  --hue-6: #ce9178;
-  --hue-6-2: #dcdcaa;
+  --hue-4: #ce9178;
+  --hue-5: #9cdcfe;
+  --hue-5-2: #569cd6;
+  --hue-6: #b5cea8;
+  --hue-6-2: #4ec9b0;
   --syntax-fg: var(--mono-1);
   --syntax-bg: #1f1f1f;
   --syntax-gutter: #6e7681;
   --syntax-guide: #404040;
   --syntax-accent: #0078d4;
+  --syntax-symbolic-color: var(--mono-1);
+  --syntax-cursor-line-background-color: transparent;
+  --syntax-cursor-line-border-color: #282828;
 }

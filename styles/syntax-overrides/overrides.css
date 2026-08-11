@@ -1,5 +1,9 @@
-/* VSCode keeps ligatures enabled, uses an immediate cursor, and italicizes comments. */
+/* VS Code keeps ligatures enabled and uses an immediate cursor. */
 lumine-text-editor {
+  .line.cursor-line {
+    box-shadow: inset 0 0 0 1px var(--syntax-cursor-line-border-color);
+  }
+
   .line.cursor-line,
   &[mini] {
     font-variant-ligatures: normal;
@@ -10,6 +14,256 @@ lumine-text-editor {
   }
 }
 
-.syntax--comment {
-  font-style: italic;
+/* Map One's shared scope structure to the Dark+/Light+ token roles. */
+
+.syntax--comment,
+.syntax--comment.syntax--caption,
+.syntax--comment.syntax--term,
+.syntax--comment.syntax--punctuation,
+.syntax--comment .syntax--markup.syntax--link {
+  color: var(--syntax-color-comment);
+}
+
+.syntax--string,
+.syntax--string.syntax--immutable {
+  color: var(--syntax-color-string);
+}
+
+.syntax--string.syntax--regexp {
+  color: var(--syntax-color-regexp);
+}
+
+.syntax--constant,
+.syntax--constant.syntax--numeric {
+  color: var(--syntax-color-constant);
+}
+
+.syntax--constant.syntax--variable {
+  color: var(--syntax-color-enum);
+}
+
+.syntax--constant.syntax--language {
+  color: var(--syntax-color-language-constant);
+}
+
+.syntax--constant.syntax--character.syntax--escape {
+  color: var(--syntax-color-escape);
+}
+
+.syntax--variable,
+.syntax--variable.syntax--parameter,
+.syntax--entity.syntax--parameter {
+  color: var(--syntax-color-variable);
+}
+
+.syntax--property {
+  color: var(--syntax-color-property);
+}
+
+.syntax--storage,
+.syntax--storage.syntax--type,
+.syntax--storage.syntax--modifier {
+  color: var(--syntax-color-storage);
+}
+
+.syntax--keyword,
+.syntax--keyword.syntax--control {
+  color: var(--syntax-color-keyword);
+}
+
+.syntax--meta.syntax--require {
+  color: var(--syntax-color-import);
+}
+
+.syntax--entity.syntax--function,
+.syntax--entity.syntax--name.syntax--function,
+.syntax--support.syntax--function,
+.syntax--support.syntax--other.syntax--function {
+  color: var(--syntax-color-function);
+}
+
+.syntax--entity.syntax--type,
+.syntax--entity.syntax--class,
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class,
+.syntax--entity.syntax--other.syntax--inherited-class,
+.syntax--support.syntax--type,
+.syntax--support.syntax--class,
+.syntax--support.syntax--module,
+.syntax--support.syntax--namespace {
+  color: var(--syntax-color-class);
+}
+
+.syntax--entity.syntax--tag,
+.syntax--entity.syntax--name.syntax--tag {
+  color: var(--syntax-color-tag);
+}
+
+.syntax--entity.syntax--attribute,
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: var(--syntax-color-attribute);
+}
+
+.syntax--keyword.syntax--function,
+.syntax--keyword.syntax--variable,
+.syntax--variable.syntax--language,
+.syntax--entity.syntax--support {
+  color: var(--syntax-color-language-variable);
+}
+
+.syntax--entity.syntax--label {
+  color: var(--syntax-color-label);
+  text-decoration: none;
+}
+
+/* Markup */
+
+.syntax--markup.syntax--heading {
+  color: var(--syntax-color-markup-heading);
+
+  .syntax--punctuation.syntax--definition.syntax--heading {
+    color: var(--syntax-color-markup-heading);
+  }
+}
+
+.syntax--markup.syntax--list.syntax--punctuation,
+.syntax--source.syntax--gfm .syntax--punctuation.syntax--definition.syntax--list-item {
+  color: var(--syntax-color-markup-list);
+}
+
+.syntax--markup.syntax--quote {
+  color: var(--syntax-text-color);
+  font-style: normal;
+
+  .syntax--punctuation.syntax--definition.syntax--quote {
+    color: var(--syntax-color-markup-quote-punctuation);
+  }
+}
+
+.syntax--markup.syntax--bold,
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: var(--syntax-color-markup-bold);
+}
+
+.syntax--markup.syntax--italic,
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: var(--syntax-color-markup-italic);
+}
+
+.syntax--markup.syntax--strike,
+.syntax--markup.syntax--strikethrough,
+.syntax--markup.syntax--underline {
+  color: var(--syntax-text-color);
+}
+
+.syntax--markup.syntax--raw {
+  color: var(--syntax-color-markup-raw);
+}
+
+.syntax--markup.syntax--link,
+.syntax--source.syntax--gfm .syntax--link .syntax--entity,
+.syntax--source.syntax--gfm .syntax--meta.syntax--link.syntax--text {
+  color: var(--syntax-color-markup-link);
+}
+
+.syntax--markup.syntax--inserted {
+  color: var(--syntax-color-constant);
+
+  .syntax--punctuation {
+    color: var(--syntax-color-constant);
+  }
+}
+
+.syntax--markup.syntax--deleted {
+  color: var(--syntax-color-string);
+
+  .syntax--punctuation {
+    color: var(--syntax-color-string);
+  }
+}
+
+.syntax--markup.syntax--changed {
+  color: var(--syntax-color-markup-changed);
+
+  .syntax--punctuation {
+    color: var(--syntax-color-markup-changed);
+  }
+}
+
+/* Language-specific rules whose One defaults combine roles that VS Code
+   colors separately. */
+
+.syntax--source.syntax--css {
+  .syntax--entity.syntax--function,
+  .syntax--entity.syntax--function.syntax--support {
+    color: var(--syntax-color-function);
+  }
+
+  .syntax--entity.syntax--selector,
+  .syntax--entity.syntax--selector.syntax--tag,
+  .syntax--entity.syntax--selector.syntax--id,
+  .syntax--punctuation.syntax--selector,
+  .syntax--punctuation.syntax--selector.syntax--wildcard,
+  .syntax--punctuation.syntax--selector.syntax--id {
+    color: var(--syntax-color-css-selector);
+  }
+
+  .syntax--entity.syntax--property,
+  .syntax--entity.syntax--property.syntax--support,
+  .syntax--entity.syntax--variable {
+    color: var(--syntax-color-css-property);
+  }
+
+  .syntax--constant,
+  .syntax--constant.syntax--support,
+  .syntax--constant.syntax--numeric,
+  .syntax--constant.syntax--media,
+  .syntax--constant.syntax--color,
+  .syntax--constant.syntax--offset {
+    color: var(--syntax-color-css-value);
+  }
+
+  .syntax--constant.syntax--attribute-value {
+    color: var(--syntax-color-string);
+  }
+}
+
+.syntax--source.syntax--json {
+  .syntax--meta.syntax--structure.syntax--dictionary.syntax--json
+    > .syntax--string.syntax--quoted.syntax--json,
+  .syntax--meta.syntax--structure.syntax--key .syntax--string.syntax--quoted.syntax--double {
+    color: var(--syntax-color-property);
+
+    > .syntax--punctuation.syntax--string {
+      color: var(--syntax-color-property);
+    }
+  }
+
+  .syntax--meta.syntax--structure.syntax--dictionary.syntax--json,
+  .syntax--meta.syntax--structure.syntax--array.syntax--json {
+    > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+    > .syntax--value.syntax--json
+      > .syntax--string.syntax--quoted.syntax--json
+      > .syntax--punctuation {
+      color: var(--syntax-color-string);
+    }
+
+    > .syntax--constant.syntax--language.syntax--json {
+      color: var(--syntax-color-language-constant);
+    }
+  }
+}
+
+.syntax--source.syntax--ts .syntax--keyword.syntax--operator,
+.syntax--source.syntax--flow .syntax--keyword.syntax--operator,
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: var(--syntax-symbolic-color);
+}
+
+.syntax--source.syntax--java {
+  .syntax--storage.syntax--type,
+  .syntax--storage.syntax--modifier.syntax--import,
+  .syntax--keyword.syntax--operator.syntax--instanceof {
+    color: var(--syntax-color-storage);
+  }
 }
