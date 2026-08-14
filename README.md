@@ -12,12 +12,11 @@ The VS Code day and night UI and syntax themes following the VS Code Modern look
 
 ## Installation
 
-To install `vscode-theme` search for _vscode-theme_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/vscode-theme`.
+To install `vscode-theme` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/vscode-theme`.
 
 ## Theme pack
 
-The package declares its four themes as the **VS Code Modern** pack. Use
-`theme-selector:toggle` to preview and select it.
+The package declares its four themes as the **VS Code Modern** pack. Use `theme-selector:toggle` to preview and select it.
 
 ## Contributing
 
