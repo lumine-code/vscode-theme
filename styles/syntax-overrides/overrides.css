@@ -1,7 +1,9 @@
 /* VS Code keeps ligatures enabled and uses an immediate cursor. */
 lumine-text-editor {
   .line.cursor-line {
-    box-shadow: inset 0 0 0 1px var(--syntax-cursor-line-border-color);
+    box-shadow:
+      inset 0 0 0 1px var(--syntax-cursor-line-border-color),
+      inset 0 0 0 100vmax var(--syntax-cursor-line-background-color);
   }
 
   .line.cursor-line,

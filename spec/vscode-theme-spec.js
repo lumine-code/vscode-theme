@@ -144,6 +144,41 @@ describe("vscode-theme", () => {
       );
       treeView.remove();
     });
+
+    it(`layers its ${mode} cursor border over line-decoration backgrounds`, async () => {
+      await lumine.packages.activatePackage("vscode-theme");
+      await lumine.packages.activatePackage(`vscode-${mode}-syntax`);
+      // One's own spec covers the real package-vs-theme cascade. Keep this
+      // fixture above the editor's pinned One copy so this spec isolates VS
+      // Code's border composition and input reset.
+      const decorationStyles = lumine.styles.addStyleSheet(
+        "lumine-text-editor .line.cursor-line.navigation-marker { background: rgb(12, 34, 56); }",
+        { priority: 0 },
+      );
+      const editor = document.createElement("lumine-text-editor");
+      const line = document.createElement("div");
+      line.className = "line cursor-line navigation-marker";
+      editor.appendChild(line);
+      document.body.appendChild(editor);
+
+      try {
+        const style = getComputedStyle(line);
+        expect(style.backgroundColor).toBe("rgb(12, 34, 56)");
+        expect(style.boxShadow).toContain("0px 0px 0px 1px");
+        expect(style.boxShadow.match(/\binset\b/g).length).toBe(2);
+
+        for (const attribute of ["mini", "input"]) {
+          editor.setAttribute(attribute, "");
+          const inputStyle = getComputedStyle(line);
+          expect(inputStyle.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+          expect(inputStyle.boxShadow).toBe("none");
+          editor.removeAttribute(attribute);
+        }
+      } finally {
+        editor.remove();
+        decorationStyles.dispose();
+      }
+    });
   }
 
   it("keeps day and night palettes on the same variable contracts", async () => {
