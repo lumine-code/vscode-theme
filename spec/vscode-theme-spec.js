@@ -202,4 +202,32 @@ describe("vscode-theme", () => {
       expect(variableNames[0]).toEqual(variableNames[1]);
     }
   });
+
+  it("uses its scrollbar treatment for custom popup lists", async () => {
+    await lumine.packages.activatePackage("vscode-theme");
+    await lumine.packages.activatePackage("vscode-day-ui");
+
+    const contextView = document.createElement("lumine-context-view");
+    document.body.appendChild(contextView);
+
+    for (const className of ["menu-box", "select-box-list"]) {
+      const list = document.createElement("div");
+      list.className = className;
+      contextView.appendChild(list);
+
+      const scrollbarStyle = getComputedStyle(list, "::-webkit-scrollbar");
+      const trackStyle = getComputedStyle(list, "::-webkit-scrollbar-track");
+      const thumbStyle = getComputedStyle(list, "::-webkit-scrollbar-thumb");
+      expect(scrollbarStyle.width).toBe("14px");
+      expect(scrollbarStyle.height).toBe("14px");
+      expect(trackStyle.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+      expect(thumbStyle.borderTopWidth).toBe("0px");
+      expect(thumbStyle.borderRadius).toBe("0px");
+      expect(thumbStyle.backgroundClip).toBe("border-box");
+
+      list.remove();
+    }
+
+    contextView.remove();
+  });
 });

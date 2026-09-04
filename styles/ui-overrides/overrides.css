@@ -2,32 +2,33 @@
 
 /* Scrollbars */
 
-.scrollbars-visible-always {
-  ::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-  }
-
-  ::-webkit-scrollbar-track,
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border: none;
-    border-radius: 0;
-    background-clip: border-box;
-  }
-
-  lumine-text-editor {
-    ::-webkit-scrollbar-track,
-    ::-webkit-scrollbar-corner {
-      background: transparent;
-    }
-  }
+.scrollbars-visible-always ::-webkit-scrollbar,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
 }
 
-.scrollbars-visible-always ::-webkit-scrollbar-thumb:hover {
+.scrollbars-visible-always ::-webkit-scrollbar-track,
+.scrollbars-visible-always ::-webkit-scrollbar-corner,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-track,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.scrollbars-visible-always ::-webkit-scrollbar-thumb,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-thumb {
+  border: none;
+  border-radius: 0;
+  background-clip: border-box;
+}
+
+.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-track,
+.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.scrollbars-visible-always ::-webkit-scrollbar-thumb:hover,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-color-hover);
 }
 
