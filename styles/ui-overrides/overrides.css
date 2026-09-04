@@ -149,12 +149,6 @@
 
 /* Modals */
 
-/* Rows here run the full width of the list, so inset the separator to where
-   their text starts rather than letting it reach the modal edges. */
-.select-list {
-  --select-list-separator-inset: calc(var(--ui-padding) / 1.5);
-}
-
 lumine-panel.modal {
   max-width: min(92vw, calc(var(--ui-size) * 50));
 
