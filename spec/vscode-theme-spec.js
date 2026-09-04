@@ -230,4 +230,37 @@ describe("vscode-theme", () => {
 
     contextView.remove();
   });
+
+  it("keeps package list tags outlined while fitting them to compact rows", async () => {
+    await lumine.packages.activatePackage("vscode-theme");
+    await lumine.packages.activatePackage("vscode-day-ui");
+
+    const packageStyles = lumine.styles.addStyleSheet(
+      ".project-list .tag { padding: 0.2em 0.4em; border: 1px solid; border-radius: 6px; }",
+      { priority: 0 },
+    );
+    const list = document.createElement("div");
+    list.className = "select-list project-list";
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = "Lumine";
+    list.appendChild(tag);
+    const workspaceElement = lumine.views.getView(lumine.workspace);
+    jasmine.attachToDOM(workspaceElement);
+    workspaceElement.appendChild(list);
+
+    try {
+      const style = getComputedStyle(tag);
+      expect(style.paddingTop).toBe("0px");
+      expect(style.paddingBottom).toBe("0px");
+      expect(style.borderTopWidth).toBe("1px");
+      expect(style.borderTopStyle).toBe("solid");
+      expect(style.borderRadius).toBe("4px");
+      expect(style.lineHeight).toBe("18.2px");
+      expect(style.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+    } finally {
+      list.remove();
+      packageStyles.dispose();
+    }
+  });
 });

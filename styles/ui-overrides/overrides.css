@@ -206,6 +206,14 @@ lumine-panel.modal {
 
 /* Lists */
 
+/* Package tags keep their outlined treatment, but their inherited padding and
+   radius are too tall and round for VS Code's compact list rows. */
+lumine-workspace .select-list .tag {
+  padding-block: 0;
+  border-radius: var(--component-border-radius);
+  line-height: 1.4;
+}
+
 .list-group:focus,
 .list-tree:focus,
 .select-list {
