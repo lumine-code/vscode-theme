@@ -26,6 +26,8 @@ const samples = [
       ["10", "numeric", `constant.numeric.${extension}`],
       ["=", "jsOperator", `keyword.operator.assignment.${extension}`],
       ["10 + 2", "jsOperator", `keyword.operator.arithmetic.${extension}`, 3],
+      ["console", "variable", `support.class.builtin.console.${extension}`],
+      ["log", "function", `support.function.builtin.console.${extension}`],
       [
         "if",
         "keyword",

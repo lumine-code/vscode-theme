@@ -93,6 +93,9 @@ jobs:
       - name: Rebuild native modules for Electron
         working-directory: lumine
         run: npm run build
+      - name: Install non-bundled spec packages
+        working-directory: lumine
+        run: node script/install-spec-packages.js --package ../vscode-theme --home "$RUNNER_TEMP/vscode-theme-spec-home" --github-env "$GITHUB_ENV"
       - name: Run the Jasmine spec suite
         working-directory: lumine
         timeout-minutes: 20

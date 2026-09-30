@@ -180,6 +180,13 @@ lumine-text-editor:is([mini], [input]) .line.cursor-line {
   color: var(--syntax-color-class);
 }
 
+/* These grammars classify console as a built-in class; VS Code treats the
+   object as a variable and retains the function role for its methods. */
+.syntax--support.syntax--class.syntax--builtin.syntax--console.syntax--js,
+.syntax--support.syntax--class.syntax--builtin.syntax--console.syntax--ts {
+  color: var(--syntax-color-variable);
+}
+
 .syntax--entity.syntax--tag,
 .syntax--entity.syntax--name.syntax--tag {
   color: var(--syntax-color-tag);
