@@ -49,6 +49,7 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
     await lumine.themes.deactivateThemes();
     for (const name of [
       "theme-selector",
+      "command-palette",
       "status-bar",
       "tabs",
       ...themeNames,
@@ -145,6 +146,72 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         expect(overlay.getBoundingClientRect().top).toBe(control.getBoundingClientRect().top);
         expect(overlay.getBoundingClientRect().left).toBe(control.getBoundingClientRect().left);
         control.remove();
+      });
+      it("keeps real command-palette rows compact until their descriptions are shown", async () => {
+        const plainCommand = "aaa-vscode-ui:plain-action";
+        const describedCommand = "aaa-vscode-ui:described-action";
+        disposables.push(
+          lumine.commands.add("lumine-workspace", {
+            [plainCommand]: () => {},
+            [describedCommand]: {
+              description: "A visible second line for the command.",
+              didDispatch: () => {},
+            },
+          }),
+        );
+        const { mainModule } = await lumine.packages.activatePackage("command-palette");
+        const palette = mainModule.ensureList();
+        await palette.show();
+        const list = palette.selectList;
+        // A picker may inherit semantic ink from the surface that opened it.
+        // Ordinary labels keep their foreground while row utilities opt in.
+        list.getElement().style.color = "var(--text-color-info)";
+        const rowFor = (name) => list.getElement().querySelector(`li[data-event-name="${name}"]`);
+        await list.selectItem(list.getItems().find((item) => item.name === describedCommand));
+
+        for (const name of [plainCommand, describedCommand]) {
+          const row = rowFor(name);
+          expect(row).not.toBeNull();
+          expect(row.querySelector(".secondary-line")).toBeNull();
+          expect(getComputedStyle(row).height).toBe(`${reference.geometry.quickInputRowHeight}px`);
+        }
+        expect(getComputedStyle(rowFor(plainCommand).querySelector(".primary-line")).color).toBe(
+          color(expected.foreground),
+        );
+        expect(rowFor(plainCommand).querySelector(".character-match")).toBeNull();
+        const plainRow = rowFor(plainCommand);
+        for (const [className, variable] of [
+          ["text-subtle", "--text-color-subtle"],
+          ["text-error", "--text-color-error"],
+        ]) {
+          plainRow.classList.add(className);
+          expect(getComputedStyle(plainRow.querySelector(".primary-line")).color).toBe(
+            color(`var(${variable})`),
+          );
+          plainRow.classList.remove(className);
+        }
+        expect(
+          getComputedStyle(rowFor(describedCommand).querySelector(".primary-line")).color,
+        ).toBe(color(expected["list.activeSelectionForeground"]));
+        expect(getComputedStyle(rowFor(describedCommand)).outlineStyle).toBe("none");
+        list.getElement().style.removeProperty("color");
+
+        await palette.toggleDescriptions();
+        expect(rowFor(describedCommand).querySelector(".secondary-line").textContent).toBe(
+          "A visible second line for the command.",
+        );
+        expect(getComputedStyle(rowFor(describedCommand)).height).toBe(
+          `${reference.geometry.quickInputRowHeight * 2}px`,
+        );
+        expect(getComputedStyle(rowFor(plainCommand)).height).toBe(
+          `${reference.geometry.quickInputRowHeight}px`,
+        );
+
+        await palette.toggleDescriptions();
+        expect(rowFor(describedCommand).querySelector(".secondary-line")).toBeNull();
+        expect(getComputedStyle(rowFor(describedCommand)).height).toBe(
+          `${reference.geometry.quickInputRowHeight}px`,
+        );
       });
       it("uses dedicated menu colors in a real command popup", async () => {
         const anchor = document.createElement("button");

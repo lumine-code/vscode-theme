@@ -406,8 +406,26 @@ lumine-panel.modal {
         line-height: 22px;
       }
 
-      &.two-lines,
-      &:has(> .secondary-line:not(:empty)) {
+      /* A label is ordinary UI text even when its host inherits an accent.
+         Explicit severity and muted rows keep their semantic foregrounds. */
+      &:not(
+        .selected,
+        .text-subtle,
+        .text-muted,
+        .text-primary,
+        .text-highlight,
+        .text-info,
+        .text-success,
+        .text-warning,
+        .text-error
+      ) {
+        color: var(--text-color);
+      }
+
+      /* Custom renderers may retain .two-lines with descriptions hidden,
+         and may nest the description beside trailing content. Size the
+         row by its visible content instead of that advisory class. */
+      &:has(.secondary-line:not(:empty)) {
         min-height: 44px;
       }
 
@@ -419,8 +437,7 @@ lumine-panel.modal {
       &.selected {
         color: var(--list-text-color-selected-focus);
         background: var(--list-background-color-selected-focus);
-        outline: 1px solid var(--accent-color);
-        outline-offset: -1px;
+        outline: none;
       }
     }
   }
