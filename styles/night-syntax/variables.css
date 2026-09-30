@@ -12,7 +12,9 @@
 :root {
   --syntax-text-color: #cccccc;
   --syntax-cursor-color: #aeafad;
-  --syntax-selection-color: #264f78;
+  --syntax-selection-color: var(--syntax-selection-color-active);
+  --syntax-selection-color-active: #264f78;
+  --syntax-selection-color-inactive: #3a3d41;
   --syntax-selection-flash-color: #0078d4;
   --syntax-background-color: #1f1f1f;
   --wrap-guide-color: #5a5a5a;
@@ -60,8 +62,19 @@
   --syntax-color-markup-bold: #569cd6;
   --syntax-color-markup-italic: #c586c0;
   --syntax-color-markup-raw: #ce9178;
-  --syntax-color-markup-link: #569cd6;
+  --syntax-color-markup-link: #cccccc;
   --syntax-color-markup-changed: #569cd6;
+  --syntax-color-operator: #d4d4d4;
+  --syntax-symbolic-color: #d4d4d4;
+  --syntax-color-operator-delete: #c586c0;
+  --syntax-color-embedded: #d4d4d4;
+  --syntax-color-tag-punctuation: #808080;
+  --syntax-color-attribute-string: #ce9178;
+  --syntax-color-json-key: #9cdcfe;
+  --syntax-color-regexp-group: #ce9178;
+  --syntax-color-regexp-anchor: #dcdcaa;
+  --syntax-color-regexp-quantifier: #d7ba7d;
+  --syntax-color-invalid: #f44747;
   --terminal-selection-background-color: #264f78;
   --terminal-selection-text-color: #cccccc;
   --terminal-cursor-color: #aeafad;
@@ -83,23 +96,6 @@
   --terminal-color-bright-magenta: #d670d6;
   --terminal-color-bright-cyan: #29b8db;
   --terminal-color-bright-white: #e5e5e5;
-  --mono-1: #d4d4d4;
-  --mono-2: #9d9d9d;
-  --mono-3: #6a9955;
-  --hue-1: #4ec9b0;
-  --hue-2: #dcdcaa;
-  --hue-3: #c586c0;
-  --hue-4: #ce9178;
-  --hue-5: #9cdcfe;
-  --hue-5-2: #569cd6;
-  --hue-6: #b5cea8;
-  --hue-6-2: #4ec9b0;
-  --syntax-fg: var(--mono-1);
-  --syntax-bg: #1f1f1f;
-  --syntax-gutter: #6e7681;
-  --syntax-guide: #404040;
-  --syntax-accent: #0078d4;
-  --syntax-symbolic-color: var(--mono-1);
   --syntax-cursor-line-background-color: transparent;
   --syntax-cursor-line-border-color: #282828;
 }

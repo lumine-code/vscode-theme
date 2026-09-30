@@ -8,6 +8,8 @@ const prettier = require("eslint-config-prettier");
 const runtimeModules = ["lumine"];
 
 module.exports = [
+  // These are source documents parsed by the grammar integration tests.
+  { ignores: ["spec/fixtures/syntax/**"] },
   js.configs.recommended,
   n.configs["flat/recommended-script"],
   {

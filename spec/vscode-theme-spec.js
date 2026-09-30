@@ -1,275 +1,286 @@
 const fs = require("fs");
 const path = require("path");
+const reference = require("./fixtures/vscode-reference.json");
+const packageRoot = path.resolve(__dirname, "..");
+const themeNames = ["day", "night"].flatMap((mode) => [
+  `vscode-${mode}-ui`,
+  `vscode-${mode}-syntax`,
+]);
 
-function findSharedOneUiPath(uiPaths, legacyBasename) {
-  return (
-    uiPaths.find((stylePath) => path.basename(stylePath) === "main.css") ??
-    uiPaths.find((stylePath) => path.basename(stylePath) === legacyBasename)
-  );
+function color(value) {
+  const probe = document.createElement("span");
+  probe.style.color = value;
+  document.body.appendChild(probe);
+  const result = getComputedStyle(probe).color;
+  probe.remove();
+  return result;
+}
+async function setMode(mode) {
+  lumine.config.set("theme.mode", mode === "day" ? "light" : "dark");
+  await lumine.themes.activateThemes();
+}
+async function loadAlternate() {
+  const fixtures = path.join(lumine.application.getResourcePath(), "spec", "fixtures", "packages");
+  for (const name of ["theme-modern-ui", "theme-modern-syntax"])
+    await lumine.packages.activatePackage(path.join(fixtures, name));
+  return ["theme-modern-ui", "theme-modern-syntax"];
 }
 
-const packageNames = [
-  "vscode-day-ui",
-  "vscode-day-syntax",
-  "vscode-night-ui",
-  "vscode-night-syntax",
-];
-
-const tokenColorCases = {
-  day: {
-    "syntax--string": "rgb(163, 21, 21)",
-    "syntax--comment": "rgb(0, 128, 0)",
-    "syntax--constant syntax--numeric": "rgb(9, 134, 88)",
-    "syntax--constant syntax--language": "rgb(0, 0, 255)",
-    "syntax--constant syntax--variable": "rgb(0, 112, 193)",
-    "syntax--storage syntax--type": "rgb(0, 0, 255)",
-    "syntax--string syntax--regexp": "rgb(129, 31, 63)",
-    "syntax--variable syntax--language": "rgb(0, 0, 255)",
-    "syntax--entity syntax--label": "rgb(0, 0, 0)",
-    "syntax--markup syntax--heading": "rgb(128, 0, 0)",
-    "syntax--markup syntax--inserted": "rgb(9, 134, 88)",
-    "syntax--entity syntax--name syntax--function": "rgb(121, 94, 38)",
-    "syntax--entity syntax--name syntax--tag": "rgb(128, 0, 0)",
-  },
-  night: {
-    "syntax--string": "rgb(206, 145, 120)",
-    "syntax--comment": "rgb(106, 153, 85)",
-    "syntax--constant syntax--numeric": "rgb(181, 206, 168)",
-    "syntax--constant syntax--language": "rgb(86, 156, 214)",
-    "syntax--constant syntax--variable": "rgb(79, 193, 255)",
-    "syntax--storage syntax--type": "rgb(86, 156, 214)",
-    "syntax--string syntax--regexp": "rgb(209, 105, 105)",
-    "syntax--variable syntax--language": "rgb(86, 156, 214)",
-    "syntax--entity syntax--label": "rgb(200, 200, 200)",
-    "syntax--markup syntax--heading": "rgb(86, 156, 214)",
-    "syntax--markup syntax--inserted": "rgb(181, 206, 168)",
-    "syntax--entity syntax--name syntax--function": "rgb(220, 220, 170)",
-    "syntax--entity syntax--name syntax--tag": "rgb(86, 156, 214)",
-  },
-};
-
-const focusedListColorCases = {
-  day: { background: "#e8e8e8", text: "#000000" },
-  night: { background: "#04395e", text: "#ffffff" },
-};
-
-const cssPropertyColorCases = {
-  day: "rgb(229, 0, 0)",
-  night: "rgb(156, 220, 254)",
-};
-
-describe("vscode-theme", () => {
+describe("vscode-theme against the frozen VS Code Modern reference", () => {
+  let disposables;
+  beforeEach(async () => {
+    disposables = [];
+    jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
+    lumine.config.transact(() => {
+      lumine.config.set("theme.accentSource", "theme");
+      lumine.config.set("theme.light", ["vscode-day-ui", "vscode-day-syntax"]);
+      lumine.config.set("theme.dark", ["vscode-night-ui", "vscode-night-syntax"]);
+    });
+    await lumine.packages.activatePackage(packageRoot);
+  });
   afterEach(async () => {
-    for (const packageName of packageNames) {
-      await lumine.packages.deactivatePackage(packageName);
+    for (const disposable of disposables.reverse()) {
+      if (typeof disposable.destroy === "function") await disposable.destroy();
+      else disposable.dispose();
     }
-    await lumine.packages.deactivatePackage("vscode-theme");
+    lumine.config.set("theme.accentSource", "theme");
+    lumine.themes.systemAccentColor = null;
+    lumine.themes.applyAccentColor();
+    await lumine.themes.deactivateThemes();
+    for (const name of [
+      "theme-selector",
+      "status-bar",
+      "tabs",
+      ...themeNames,
+      "vscode-theme",
+      "theme-modern-ui",
+      "theme-modern-syntax",
+    ])
+      await lumine.packages.deactivatePackage(name);
   });
 
-  it("registers its light and dark themes as a pack", async () => {
-    await lumine.packages.activatePackage("vscode-theme");
-
-    const themePack = lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
-
-    expect(themePack.light).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
-    expect(themePack.dark).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
-  });
-
-  for (const mode of ["day", "night"]) {
-    it(`inherits One's shared styles and applies its own ${mode} overrides`, async () => {
-      await lumine.packages.activatePackage("vscode-theme");
-
-      const uiPackageName = `vscode-${mode}-ui`;
-      const syntaxPackageName = `vscode-${mode}-syntax`;
-      const uiPaths = lumine.packages.getLoadedPackage(uiPackageName).getStylesheetPaths();
-      const syntaxPaths = lumine.packages.getLoadedPackage(syntaxPackageName).getStylesheetPaths();
-      const uiPathByName = new Map(
-        uiPaths.map((stylePath) => [path.basename(stylePath), stylePath]),
-      );
-      const syntaxPathByName = new Map(
-        syntaxPaths.map((stylePath) => [path.basename(stylePath), stylePath]),
-      );
-      // These fallbacks keep this repo's CI green until Lumine repins the
-      // consolidated one-theme stylesheet.
-      const oneUiBadgesPath = findSharedOneUiPath(uiPaths, "02-badges.css");
-      const oneUiButtonsPath = findSharedOneUiPath(uiPaths, "03-buttons.css");
-
-      expect(oneUiBadgesPath).toContain("one-theme");
-      expect(oneUiButtonsPath).toContain("one-theme");
-      expect(uiPathByName.get("overrides.css")).toContain("vscode-theme");
-      expect(uiPathByName.has("config.css")).toBe(false);
-      expect(syntaxPathByName.get("04-base.css")).toContain("one-theme");
-      expect(syntaxPathByName.get("variables.css")).toContain("vscode-theme");
-      expect(syntaxPathByName.get("overrides.css")).toContain("vscode-theme");
-
-      expect(uiPaths.indexOf(oneUiButtonsPath)).toBeLessThan(
-        uiPaths.indexOf(uiPathByName.get("overrides.css")),
-      );
-      expect(syntaxPaths.indexOf(syntaxPathByName.get("04-base.css"))).toBeLessThan(
-        syntaxPaths.indexOf(syntaxPathByName.get("overrides.css")),
-      );
-
-      await lumine.packages.activatePackage(uiPackageName);
-      await lumine.packages.activatePackage(syntaxPackageName);
-      expect(lumine.themes.stylesheetElementForId(oneUiButtonsPath)).not.toBeNull();
-      expect(
-        lumine.themes.stylesheetElementForId(uiPathByName.get("overrides.css")),
-      ).not.toBeNull();
-      expect(
-        lumine.themes.stylesheetElementForId(syntaxPathByName.get("04-base.css")),
-      ).not.toBeNull();
-      expect(
-        lumine.themes.stylesheetElementForId(syntaxPathByName.get("overrides.css")),
-      ).not.toBeNull();
-
-      for (const [className, expectedColor] of Object.entries(tokenColorCases[mode])) {
-        const token = document.createElement("span");
-        token.className = className;
-        document.body.appendChild(token);
-        expect(getComputedStyle(token).color).toBe(expectedColor);
-        token.remove();
-      }
-
-      const cssSource = document.createElement("span");
-      const cssProperty = document.createElement("span");
-      cssSource.className = "syntax--source syntax--css";
-      cssProperty.className = "syntax--entity syntax--property syntax--support";
-      cssSource.appendChild(cssProperty);
-      document.body.appendChild(cssSource);
-      expect(getComputedStyle(cssProperty).color).toBe(cssPropertyColorCases[mode]);
-      cssSource.remove();
-
-      const treeView = document.createElement("div");
-      treeView.className = "tree-view";
-      treeView.tabIndex = -1;
-      document.body.appendChild(treeView);
-      treeView.focus();
-      const treeViewStyle = getComputedStyle(treeView);
-      expect(treeViewStyle.getPropertyValue("--button-background-color-selected").trim()).toBe(
-        focusedListColorCases[mode].background,
-      );
-      expect(treeViewStyle.getPropertyValue("--accent-bg-text-color").trim()).toBe(
-        focusedListColorCases[mode].text,
-      );
-      treeView.remove();
-    });
-
-    it(`layers its ${mode} cursor border over line-decoration backgrounds`, async () => {
-      await lumine.packages.activatePackage("vscode-theme");
-      await lumine.packages.activatePackage(`vscode-${mode}-syntax`);
-      // One's own spec covers the real package-vs-theme cascade. Keep this
-      // fixture above the editor's pinned One copy so this spec isolates VS
-      // Code's border composition and input reset.
-      const decorationStyles = lumine.styles.addStyleSheet(
-        "lumine-text-editor .line.cursor-line.navigation-marker { background: rgb(12, 34, 56); }",
-        { priority: 0 },
-      );
-      const editor = document.createElement("lumine-text-editor");
-      const line = document.createElement("div");
-      line.className = "line cursor-line navigation-marker";
-      editor.appendChild(line);
-      document.body.appendChild(editor);
-
-      try {
-        const style = getComputedStyle(line);
-        expect(style.backgroundColor).toBe("rgb(12, 34, 56)");
-        expect(style.boxShadow).toContain("0px 0px 0px 1px");
-        expect(style.boxShadow.match(/\binset\b/g).length).toBe(2);
-
-        for (const attribute of ["mini", "input"]) {
-          editor.setAttribute(attribute, "");
-          const inputStyle = getComputedStyle(line);
-          expect(inputStyle.backgroundColor).toBe("rgba(0, 0, 0, 0)");
-          expect(inputStyle.boxShadow).toBe("none");
-          editor.removeAttribute(attribute);
+  it("registers both pairs and loads only its own theme styles", async () => {
+    const pack = lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
+    expect(pack.light).toEqual(["vscode-day-ui", "vscode-day-syntax"]);
+    expect(pack.dark).toEqual(["vscode-night-ui", "vscode-night-syntax"]);
+    for (const mode of ["day", "night"]) {
+      await setMode(mode);
+      for (const name of [`vscode-${mode}-ui`, `vscode-${mode}-syntax`]) {
+        const paths = lumine.packages.getLoadedPackage(name).getStylesheetPaths();
+        expect(paths.length).toBeGreaterThan(0);
+        for (const p of paths) {
+          expect(path.relative(packageRoot, p).startsWith("..")).toBe(false);
+          expect(lumine.themes.stylesheetElementForId(p)).not.toBeNull();
         }
-      } finally {
-        editor.remove();
-        decorationStyles.dispose();
       }
-    });
-  }
+    }
+    expect(lumine.packages.getLoadedPackage("one-theme")).toBeUndefined();
+  });
 
-  it("keeps day and night palettes on the same variable contracts", async () => {
-    await lumine.packages.activatePackage("vscode-theme");
-
-    for (const themeType of ["ui", "syntax"]) {
-      const variableNames = packageNames
-        .filter((packageName) => packageName.endsWith(`-${themeType}`))
-        .map((packageName) => {
-          const variablesPath = lumine.packages
-            .getLoadedPackage(packageName)
-            .getStylesheetPaths()
-            .find(
-              (stylePath) =>
-                path.basename(stylePath) === "variables.css" && stylePath.includes("vscode-theme"),
-            );
-          const source = fs.readFileSync(variablesPath, "utf8");
-          return [...source.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gm)].map((match) => match[1]);
+  for (const mode of ["day", "night"])
+    describe(mode, () => {
+      const expected = reference.modes[mode].colors;
+      beforeEach(async () => {
+        await setMode(mode);
+      });
+      it("uses reference editor, tab and status-bar surfaces and heights", async () => {
+        const statusPackage = await lumine.packages.activatePackage("status-bar");
+        await lumine.packages.activatePackage("tabs");
+        const editor = await lumine.workspace.open();
+        disposables.push(editor);
+        const element = lumine.views.getView(editor);
+        element.focus();
+        const status = statusPackage.mainModule.statusBar.element;
+        const tab = lumine.workspace.getActivePane().getElement().querySelector(".tab.active");
+        expect(getComputedStyle(element).backgroundColor).toBe(
+          color(expected["editor.background"]),
+        );
+        expect(getComputedStyle(element).color).toBe(color(expected["editor.foreground"]));
+        expect(getComputedStyle(tab).height).toBe(`${reference.geometry.tabHeight}px`);
+        expect(getComputedStyle(tab).backgroundColor).toBe(color(expected["tab.activeBackground"]));
+        expect(getComputedStyle(tab).color).toBe(color(expected["tab.activeForeground"]));
+        expect(getComputedStyle(status).height).toBe(`${reference.geometry.statusbarHeight}px`);
+        expect(getComputedStyle(status).backgroundColor).toBe(
+          color(expected["statusBar.background"]),
+        );
+        expect(getComputedStyle(status).color).toBe(color(expected["statusBar.foreground"]));
+      });
+      it("uses the quick-input surface, compact rows and input focus in a real picker", async () => {
+        const host = lumine.workspace.addSelectList({
+          items: ["Open File"],
+          renderItem: (item) => {
+            const row = document.createElement("li");
+            row.textContent = item;
+            return row;
+          },
         });
+        disposables.push(host);
+        await host.show();
+        const panel = host.getPanel().getElement();
+        const row = host.getModel().getElement().querySelector("li.selected");
+        expect(getComputedStyle(panel).backgroundColor).toBe(
+          color(expected["quickInput.background"]),
+        );
+        expect(parseFloat(getComputedStyle(panel).width)).toBe(
+          Math.min(reference.geometry.quickInputWidth, window.innerWidth - 16),
+        );
+        expect(getComputedStyle(row).height).toBe(`${reference.geometry.quickInputRowHeight}px`);
+        expect(getComputedStyle(row).backgroundColor).toBe(
+          color(expected["list.activeSelectionBackground"]),
+        );
+        expect(getComputedStyle(row).color).toBe(color(expected["list.activeSelectionForeground"]));
+        const input = host.getModel().getElement().querySelector("lumine-text-editor[mini]");
+        input.focus();
+        expect(getComputedStyle(input).backgroundColor).toBe(color(expected["input.background"]));
+        expect(getComputedStyle(input).borderTopColor).toBe(color(expected.focusBorder));
+        expect(getComputedStyle(input).boxShadow).toBe("none");
+        // Overlay decorations must keep their viewport containing block.
+        expect(getComputedStyle(panel).transform).toBe("none");
+        const overlay = document.createElement("lumine-overlay");
+        input.appendChild(overlay);
+        overlay.style.cssText = "position: fixed; top: 50px; left: 70px; width: 10px; height: 10px";
+        const control = document.createElement("div");
+        control.style.cssText = overlay.style.cssText;
+        lumine.views.getView(lumine.workspace).appendChild(control);
+        expect(overlay.getBoundingClientRect().top).toBe(control.getBoundingClientRect().top);
+        expect(overlay.getBoundingClientRect().left).toBe(control.getBoundingClientRect().left);
+        control.remove();
+      });
+      it("uses dedicated menu colors in a real command popup", async () => {
+        const anchor = document.createElement("button");
+        anchor.style.cssText = "position: fixed; left: 100px; top: 100px";
+        document.body.appendChild(anchor);
+        disposables.push({ dispose: () => anchor.remove() });
+        const popup = lumine.menu.showPopup({
+          anchor,
+          template: [{ label: "Open", command: "core:open-file" }],
+        });
+        disposables.push(popup);
+        popup.rootList.selectItem(popup.rootList.items[0], { focus: true });
+        const item = popup.element.querySelector(".menu-item");
+        // Background-color transitions settle on the native rendering clock.
+        await waitForFrames(
+          () =>
+            getComputedStyle(item).backgroundColor === color(expected["menu.selectionBackground"]),
+          { description: "the menu selection color" },
+        );
+        expect(getComputedStyle(popup.rootList.element).backgroundColor).toBe(
+          color(expected["menu.background"]),
+        );
+        expect(getComputedStyle(item).backgroundColor).toBe(
+          color(expected["menu.selectionBackground"]),
+        );
+        expect(getComputedStyle(item).color).toBe(color(expected["menu.selectionForeground"]));
+        expect(getComputedStyle(item.querySelector(".menu-item-keystroke")).color).toBe(
+          color(expected["menu.selectionForeground"]),
+        );
+      });
+      it("styles real popup scrollbars with reference width and opacity", async () => {
+        const select = lumine.menu.createSelectBox({ items: ["Light", "Dark"], value: "Light" });
+        disposables.push(select);
+        document.body.appendChild(select.element);
+        await select.open();
+        const list = select.listElement;
+        const thumb = getComputedStyle(list, "::-webkit-scrollbar-thumb");
+        expect(getComputedStyle(list, "::-webkit-scrollbar").width).toBe(
+          `${reference.geometry.popupScrollbarWidth}px`,
+        );
+        expect(getComputedStyle(list, "::-webkit-scrollbar-track").backgroundColor).toBe(
+          "rgba(0, 0, 0, 0)",
+        );
+        expect(thumb.borderTopWidth).toBe("0px");
+        expect(thumb.borderRadius).toBe("0px");
+        expect(thumb.backgroundColor).toBe(color(expected["scrollbarSlider.background"]));
+        expect(thumb.backgroundClip).toBe("border-box");
+      });
+      it("uses reference primary-button geometry and a single focus outline", () => {
+        const button = document.createElement("button");
+        button.className = "btn btn-primary";
+        button.textContent = "Apply";
+        document.body.appendChild(button);
+        disposables.push({ dispose: () => button.remove() });
+        const style = getComputedStyle(button);
+        expect(style.height).toBe(`${reference.geometry.buttonHeight}px`);
+        expect(style.fontSize).toBe(`${reference.geometry.buttonFontSize}px`);
+        expect(style.lineHeight).toBe(`${reference.geometry.buttonLineHeight}px`);
+        expect(style.paddingTop).toBe(`${reference.geometry.buttonPaddingVertical}px`);
+        expect(style.paddingLeft).toBe(`${reference.geometry.buttonPaddingHorizontal}px`);
+        expect(style.borderTopWidth).toBe(`${reference.geometry.buttonBorderWidth}px`);
+        expect(style.backgroundColor).toBe(color(expected["button.background"]));
+        expect(style.color).toBe(color(expected["button.foreground"]));
+        button.focus();
+        expect(getComputedStyle(button).outlineWidth).toBe("1px");
+        expect(getComputedStyle(button).outlineColor).toBe(color(expected.focusBorder));
+        expect(getComputedStyle(button).boxShadow).toBe("none");
+      });
+      it("preserves all sixteen reference terminal ANSI colors", () => {
+        for (const [name, value] of Object.entries(reference.modes[mode].ansi)) {
+          const suffix = name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+          expect(color(`var(--terminal-color-${suffix})`)).toBe(color(value));
+        }
+      });
+    });
 
-      expect(variableNames[0]).toEqual(variableNames[1]);
-    }
+  it("removes VS Code styles when switching to an independent alternate pair", async () => {
+    await setMode("day");
+    await setMode("night");
+    expect(lumine.themes.getActiveThemeNames().sort()).toEqual([
+      "vscode-night-syntax",
+      "vscode-night-ui",
+    ]);
+    const paths = lumine.themes.getActiveThemes().flatMap((theme) => theme.getStylesheetPaths());
+    const pair = await loadAlternate();
+    lumine.config.set("theme.dark", pair);
+    await lumine.themes.queueThemeSwitch();
+    for (const p of paths) expect(lumine.themes.stylesheetElementForId(p)).toBeNull();
+    expect(color("var(--text-color)")).toBe(color("#123456"));
+    expect(lumine.packages.getLoadedPackage("one-theme")).toBeUndefined();
   });
-
-  it("uses its scrollbar treatment for custom popup lists", async () => {
-    await lumine.packages.activatePackage("vscode-theme");
-    await lumine.packages.activatePackage("vscode-day-ui");
-
-    const contextView = document.createElement("lumine-context-view");
-    document.body.appendChild(contextView);
-
-    for (const className of ["menu-box", "select-box-list"]) {
-      const list = document.createElement("div");
-      list.className = className;
-      contextView.appendChild(list);
-
-      const scrollbarStyle = getComputedStyle(list, "::-webkit-scrollbar");
-      const trackStyle = getComputedStyle(list, "::-webkit-scrollbar-track");
-      const thumbStyle = getComputedStyle(list, "::-webkit-scrollbar-thumb");
-      expect(scrollbarStyle.width).toBe("14px");
-      expect(scrollbarStyle.height).toBe("14px");
-      expect(trackStyle.backgroundColor).toBe("rgba(0, 0, 0, 0)");
-      expect(thumbStyle.borderTopWidth).toBe("0px");
-      expect(thumbStyle.borderRadius).toBe("0px");
-      expect(thumbStyle.backgroundClip).toBe("border-box");
-
-      list.remove();
-    }
-
-    contextView.remove();
+  it("restores both pairs and the palette after Theme Selector preview cancellation", async () => {
+    const pair = await loadAlternate();
+    const other = { name: "Reference alternate", light: pair, dark: pair };
+    disposables.push(lumine.themes.registerThemePack(other));
+    lumine.themes.setThemePack(other);
+    await setMode("day");
+    const pack = await lumine.packages.activatePackage("theme-selector");
+    const selector = pack.mainModule.getSelector();
+    await selector.show();
+    selector.preview(lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern"));
+    await lumine.themes.queueThemeSwitch();
+    expect(color("var(--text-color)")).toBe(color(reference.modes.day.colors.foreground));
+    selector.cancel();
+    await lumine.themes.queueThemeSwitch();
+    expect(lumine.config.get("theme.light")).toEqual(pair);
+    expect(lumine.config.get("theme.dark")).toEqual(pair);
+    expect(color("var(--text-color)")).toBe(color("#123456"));
+    for (const name of ["vscode-day-ui", "vscode-day-syntax"])
+      for (const p of lumine.packages.getLoadedPackage(name).getStylesheetPaths())
+        expect(lumine.themes.stylesheetElementForId(p)).toBeNull();
   });
-
-  it("keeps package list tags outlined while fitting them to compact rows", async () => {
-    await lumine.packages.activatePackage("vscode-theme");
-    await lumine.packages.activatePackage("vscode-day-ui");
-
-    const packageStyles = lumine.styles.addStyleSheet(
-      ".project-list .tag { padding: 0.2em 0.4em; border: 1px solid; border-radius: 6px; }",
-      { priority: 0 },
+  it("respects the system accent and restores the theme accent", async () => {
+    await setMode("night");
+    spyOn(lumine.themes.applicationDelegate, "invokeApp").and.returnValue(
+      Promise.resolve("#112233"),
     );
-    const list = document.createElement("div");
-    list.className = "select-list project-list";
-    const tag = document.createElement("span");
-    tag.className = "tag";
-    tag.textContent = "Lumine";
-    list.appendChild(tag);
-    const workspaceElement = lumine.views.getView(lumine.workspace);
-    jasmine.attachToDOM(workspaceElement);
-    workspaceElement.appendChild(list);
-
-    try {
-      const style = getComputedStyle(tag);
-      expect(style.paddingTop).toBe("0px");
-      expect(style.paddingBottom).toBe("0px");
-      expect(style.borderTopWidth).toBe("1px");
-      expect(style.borderTopStyle).toBe("solid");
-      expect(style.borderRadius).toBe("4px");
-      expect(style.lineHeight).toBe("18.2px");
-      expect(style.backgroundColor).toBe("rgba(0, 0, 0, 0)");
-    } finally {
-      list.remove();
-      packageStyles.dispose();
+    lumine.config.set("theme.accentSource", "system");
+    await lumine.themes.refreshSystemAccentColor();
+    expect(color("var(--accent-bg-color)")).toBe(color("#112233"));
+    lumine.config.set("theme.accentSource", "theme");
+    lumine.themes.applyAccentColor();
+    expect(color("var(--accent-bg-color)")).toBe(
+      color(reference.modes.night.colors["button.background"]),
+    );
+  });
+  it("keeps both modes on the same variable contracts", () => {
+    for (const type of ["ui", "syntax"]) {
+      const names = ["day", "night"].map((mode) => {
+        const source = fs.readFileSync(
+          path.join(packageRoot, "styles", `${mode}-${type}`, "variables.css"),
+          "utf8",
+        );
+        return [...source.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gm)].map((match) => match[1]);
+      });
+      expect(names[0]).toEqual(names[1]);
     }
   });
 });

@@ -1,0 +1,344 @@
+/* Editor surfaces use Lumine's core structure; token rules below follow the
+   frozen VS Code reference, with adapters for the fleet's Tree-sitter scopes. */
+lumine-text-editor {
+  background-color: var(--syntax-background-color);
+  color: var(--syntax-text-color);
+
+  .cursor {
+    border-left: 2px solid var(--syntax-cursor-color);
+    transition: none;
+  }
+
+  .invisible {
+    color: var(--syntax-text-color);
+  }
+
+  .invisible-character {
+    color: var(--syntax-invisible-character-color);
+  }
+
+  .gutter {
+    background-color: var(--syntax-gutter-background-color);
+
+    .line-number {
+      color: var(--syntax-gutter-text-color);
+      opacity: 1;
+
+      &.active-line-number {
+        color: var(--syntax-gutter-text-color-selected);
+      }
+
+      .icon-right {
+        color: var(--syntax-text-color);
+      }
+    }
+  }
+
+  .fold-marker::after {
+    color: var(--syntax-gutter-text-color-selected);
+  }
+}
+
+/* Core uses this contract for text regions and selected block decorations. */
+lumine-text-editor:not([mini]):not([input]) {
+  --syntax-selection-color: var(--syntax-selection-color-inactive);
+
+  &.is-focused {
+    --syntax-selection-color: var(--syntax-selection-color-active);
+  }
+}
+
+/* Compose with line decorations instead of replacing their backgrounds. */
+lumine-text-editor:not([mini]):not([input]) .line.cursor-line {
+  box-shadow:
+    inset 0 0 0 2px var(--syntax-cursor-line-border-color),
+    inset 0 0 0 100vmax var(--syntax-cursor-line-background-color);
+}
+
+lumine-text-editor:is([mini], [input]) .line.cursor-line {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.syntax--comment,
+.syntax--punctuation.syntax--definition.syntax--comment {
+  color: var(--syntax-color-comment);
+}
+
+.syntax--string,
+.syntax--markup.syntax--raw {
+  color: var(--syntax-color-string);
+}
+
+.syntax--constant.syntax--numeric,
+.syntax--keyword.syntax--other.syntax--unit {
+  color: var(--syntax-color-constant);
+}
+
+.syntax--constant.syntax--language,
+.syntax--constant.syntax--builtin,
+.syntax--constant.syntax--character,
+.syntax--constant.syntax--other.syntax--option,
+.syntax--storage,
+.syntax--keyword {
+  color: var(--syntax-color-storage);
+}
+
+.syntax--keyword.syntax--control,
+.syntax--keyword.syntax--other.syntax--using,
+.syntax--keyword.syntax--other.syntax--operator,
+.syntax--entity.syntax--name.syntax--operator {
+  color: var(--syntax-color-keyword);
+}
+
+.syntax--keyword.syntax--operator,
+.syntax--entity.syntax--operator.syntax--symbolic,
+.syntax--keyword.syntax--symbolic {
+  color: var(--syntax-color-operator);
+}
+
+.syntax--keyword.syntax--operator.syntax--new,
+.syntax--keyword.syntax--operator.syntax--expression,
+.syntax--keyword.syntax--operator.syntax--cast,
+.syntax--keyword.syntax--operator.syntax--sizeof,
+.syntax--keyword.syntax--operator.syntax--alignof,
+.syntax--keyword.syntax--operator.syntax--typeid,
+.syntax--keyword.syntax--operator.syntax--alignas,
+.syntax--keyword.syntax--operator.syntax--instanceof,
+.syntax--keyword.syntax--operator.syntax--typeof,
+.syntax--keyword.syntax--operator.syntax--keyof,
+.syntax--keyword.syntax--operator.syntax--wordlike,
+.syntax--keyword.syntax--operator.syntax--noexcept,
+.syntax--source.syntax--python .syntax--keyword.syntax--operator.syntax--logical {
+  color: var(--syntax-color-storage);
+}
+
+.syntax--keyword.syntax--operator.syntax--delete {
+  color: var(--syntax-color-operator-delete);
+}
+
+.syntax--source.syntax--cpp .syntax--keyword.syntax--operator.syntax--new,
+.syntax--source.syntax--cpp .syntax--keyword.syntax--operator.syntax--delete {
+  color: var(--syntax-color-keyword);
+}
+
+.syntax--variable,
+.syntax--property,
+.syntax--entity.syntax--parameter,
+.syntax--entity.syntax--name.syntax--variable,
+.syntax--support.syntax--variable,
+.syntax--constant.syntax--other.syntax--placeholder {
+  color: var(--syntax-color-variable);
+}
+
+.syntax--variable.syntax--language,
+.syntax--keyword.syntax--function,
+.syntax--keyword.syntax--variable,
+.syntax--entity.syntax--support {
+  color: var(--syntax-color-language-variable);
+}
+
+.syntax--variable.syntax--other.syntax--constant,
+.syntax--variable.syntax--other.syntax--enummember,
+.syntax--constant.syntax--variable {
+  color: var(--syntax-color-enum);
+}
+
+/* The JS/TS grammars use constant.other for their uppercase identifier captures. */
+.syntax--source.syntax--js .syntax--constant.syntax--other:not(.syntax--character-class),
+.syntax--source.syntax--ts .syntax--constant.syntax--other:not(.syntax--character-class) {
+  color: var(--syntax-color-enum);
+}
+
+.syntax--entity.syntax--function,
+.syntax--entity.syntax--name.syntax--function,
+.syntax--support.syntax--function,
+.syntax--support.syntax--other.syntax--function {
+  color: var(--syntax-color-function);
+}
+
+.syntax--entity.syntax--type,
+.syntax--entity.syntax--class,
+.syntax--entity.syntax--name.syntax--type,
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--namespace,
+.syntax--entity.syntax--name.syntax--scope-resolution,
+.syntax--entity.syntax--other.syntax--inherited-class,
+.syntax--support.syntax--type,
+.syntax--support.syntax--class,
+.syntax--support.syntax--namespace,
+.syntax--support.syntax--module,
+.syntax--support.syntax--constant.syntax--math,
+.syntax--support.syntax--constant.syntax--dom,
+.syntax--support.syntax--constant.syntax--json {
+  color: var(--syntax-color-class);
+}
+
+.syntax--source.syntax--java .syntax--storage.syntax--type,
+.syntax--source.syntax--groovy .syntax--storage.syntax--type,
+.syntax--source.syntax--cs .syntax--storage.syntax--type {
+  color: var(--syntax-color-class);
+}
+
+.syntax--entity.syntax--tag,
+.syntax--entity.syntax--name.syntax--tag {
+  color: var(--syntax-color-tag);
+}
+
+.syntax--entity.syntax--attribute,
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: var(--syntax-color-attribute);
+}
+
+.syntax--punctuation.syntax--definition.syntax--tag {
+  color: var(--syntax-color-tag-punctuation);
+}
+
+.syntax--entity.syntax--label,
+.syntax--entity.syntax--name.syntax--label {
+  color: var(--syntax-color-label);
+}
+
+.syntax--meta.syntax--embedded,
+.syntax--meta.syntax--template.syntax--expression {
+  color: var(--syntax-color-embedded);
+}
+
+.syntax--punctuation.syntax--section.syntax--embedded,
+.syntax--punctuation.syntax--definition.syntax--template-expression {
+  color: var(--syntax-color-storage);
+}
+
+.syntax--constant.syntax--character.syntax--escape {
+  color: var(--syntax-color-escape);
+}
+
+.syntax--source.syntax--css {
+  .syntax--entity.syntax--selector,
+  .syntax--entity.syntax--name.syntax--tag,
+  .syntax--entity.syntax--other.syntax--attribute-name.syntax--class,
+  .syntax--entity.syntax--other.syntax--attribute-name.syntax--id,
+  .syntax--entity.syntax--other.syntax--attribute-name.syntax--pseudo-class,
+  .syntax--entity.syntax--other.syntax--attribute-name.syntax--pseudo-element,
+  .syntax--punctuation.syntax--selector {
+    color: var(--syntax-color-css-selector);
+  }
+
+  .syntax--support.syntax--type.syntax--property-name,
+  .syntax--entity.syntax--property,
+  .syntax--variable,
+  .syntax--entity.syntax--variable {
+    color: var(--syntax-color-css-property);
+  }
+
+  .syntax--support.syntax--constant,
+  .syntax--constant.syntax--other.syntax--color,
+  .syntax--constant.syntax--other.syntax--rgb-value,
+  .syntax--constant.syntax--color,
+  .syntax--constant.syntax--media {
+    color: var(--syntax-color-css-value);
+  }
+}
+
+.syntax--string.syntax--quoted.syntax--html,
+.syntax--string.syntax--unquoted.syntax--html,
+.syntax--string.syntax--quoted.syntax--xml,
+.syntax--string.syntax--unquoted.syntax--xml {
+  color: var(--syntax-color-attribute-string);
+}
+
+.syntax--source.syntax--json {
+  .syntax--support.syntax--type.syntax--property-name,
+  .syntax--meta.syntax--structure.syntax--key,
+  .syntax--meta.syntax--structure.syntax--key .syntax--string {
+    color: var(--syntax-color-json-key);
+  }
+}
+
+/* Regex injections retain their own token roles inside JS and TS strings. */
+.syntax--string.syntax--regexp {
+  color: var(--syntax-color-regexp);
+}
+
+.syntax--punctuation.syntax--definition.syntax--group.syntax--regexp,
+.syntax--punctuation.syntax--definition.syntax--character-class.syntax--regexp,
+.syntax--punctuation.syntax--character.syntax--set.syntax--regexp,
+.syntax--keyword.syntax--operator.syntax--negation.syntax--regexp {
+  color: var(--syntax-color-regexp-group);
+}
+
+.syntax--constant.syntax--character.syntax--character-class.syntax--regexp,
+.syntax--constant.syntax--other.syntax--character-class.syntax--regexp,
+.syntax--constant.syntax--character.syntax--set.syntax--regexp {
+  color: var(--syntax-color-regexp);
+}
+
+.syntax--keyword.syntax--control.syntax--anchor.syntax--regexp,
+.syntax--keyword.syntax--operator.syntax--or.syntax--regexp {
+  color: var(--syntax-color-regexp-anchor);
+}
+
+.syntax--keyword.syntax--operator.syntax--quantifier.syntax--regexp {
+  color: var(--syntax-color-regexp-quantifier);
+}
+
+.syntax--markup.syntax--heading {
+  color: var(--syntax-color-markup-heading);
+  font-weight: bold;
+}
+
+.syntax--markup.syntax--bold,
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: var(--syntax-color-markup-bold);
+  font-weight: bold;
+}
+
+.syntax--markup.syntax--italic,
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: var(--syntax-color-markup-italic);
+  font-style: italic;
+}
+
+.syntax--markup.syntax--strike,
+.syntax--markup.syntax--strikethrough {
+  text-decoration: line-through;
+}
+
+.syntax--markup.syntax--underline {
+  text-decoration: underline;
+}
+
+.syntax--markup.syntax--raw {
+  color: var(--syntax-color-markup-raw);
+}
+
+.syntax--markup.syntax--list.syntax--punctuation,
+.syntax--punctuation.syntax--definition.syntax--list-item {
+  color: var(--syntax-color-markup-list);
+}
+
+.syntax--punctuation.syntax--definition.syntax--quote,
+.syntax--punctuation.syntax--definition.syntax--blockquote {
+  color: var(--syntax-color-markup-quote-punctuation);
+}
+
+.syntax--markup.syntax--link,
+.syntax--source.syntax--gfm .syntax--meta.syntax--link.syntax--text {
+  color: var(--syntax-color-markup-link);
+}
+
+.syntax--markup.syntax--inserted {
+  color: var(--syntax-color-constant);
+}
+
+.syntax--markup.syntax--deleted {
+  color: var(--syntax-color-string);
+}
+
+.syntax--markup.syntax--changed {
+  color: var(--syntax-color-markup-changed);
+}
+
+.syntax--invalid {
+  color: var(--syntax-color-invalid);
+}

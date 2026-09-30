@@ -1,0 +1,541 @@
+/* VS Code Modern appearance on Lumine's component and layout contract. */
+
+/* Chrome */
+lumine-workspace {
+  background: var(--app-background-color);
+}
+
+.title-bar,
+.status-bar {
+  border-bottom: 1px solid var(--base-border-color);
+}
+
+.title-bar .control-tiles .title-bar-item {
+  color: var(--text-color-subtle);
+
+  &:hover {
+    color: var(--text-color);
+    background: var(--level-3-color-hover);
+  }
+
+  &:active {
+    background: var(--level-3-color-active);
+  }
+}
+
+.status-bar {
+  height: 22px;
+  line-height: 22px;
+  font-size: 12px;
+  border-top: 1px solid var(--base-border-color);
+  border-bottom: none;
+  background: var(--app-background-color);
+
+  .flexbox-repaint-hack {
+    padding: 0;
+  }
+
+  .status-bar-left,
+  .status-bar-right {
+    gap: 0;
+  }
+
+  .status-bar-item {
+    padding-inline: 8px;
+
+    &:hover {
+      color: var(--vscode-status-hover-foreground);
+      background: var(--vscode-status-hover-background);
+    }
+
+    &:focus-visible {
+      outline: 1px solid var(--accent-color);
+      outline-offset: -1px;
+    }
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+lumine-pane-container lumine-pane-axis.horizontal > lumine-pane-resize-handle {
+  border-right: 1px solid var(--pane-item-border-color);
+}
+
+lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
+  border-bottom: 1px solid var(--pane-item-border-color);
+}
+
+.lumine-dock-inner.lumine-dock-open.left {
+  border-right: 1px solid var(--tool-panel-border-color);
+}
+
+.lumine-dock-inner.lumine-dock-open.right {
+  border-left: 1px solid var(--tool-panel-border-color);
+}
+
+.lumine-dock-inner.lumine-dock-open.bottom {
+  border-top: 1px solid var(--tool-panel-border-color);
+}
+
+/* Tabs keep the package's drag, status and icon behavior. */
+.tab-bar {
+  height: var(--tab-height);
+  background: var(--tab-bar-background-color);
+  box-shadow: inset 0 -1px var(--tab-bar-border-color);
+  overflow: auto hidden;
+
+  &:empty {
+    display: none;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab,
+  .tab.active {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 40px;
+    max-width: 300px;
+    height: var(--tab-height);
+    margin: 0;
+    padding: 0 30px 0 10px;
+    font-size: var(--font-size);
+    line-height: var(--tab-height);
+    border-right: 1px solid var(--tab-border-color);
+    color: var(--tab-text-color);
+    background: var(--tab-background-color);
+
+    .title {
+      padding: 0;
+      text-align: left;
+    }
+
+    .close-icon {
+      top: calc((var(--tab-height) - 20px) / 2);
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      border-radius: var(--component-border-radius);
+      opacity: 0;
+
+      &:hover {
+        background: var(--background-color-highlight);
+      }
+    }
+
+    &:hover {
+      background: var(--tab-background-color-active);
+    }
+
+    &:hover .close-icon,
+    &.active .close-icon {
+      opacity: 1;
+    }
+
+    &.active {
+      color: var(--tab-text-color-active);
+      background: var(--tab-background-color-active);
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 1px;
+        background: var(--tab-border-color);
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+.pane:focus-within .tab-bar .tab.active::before {
+  background: var(--accent-color);
+}
+
+lumine-dock .tab-bar .tab {
+  max-width: none;
+
+  &.active {
+    background: var(--tool-panel-background-color);
+  }
+}
+
+/* Lists have separate focused and unfocused selection palettes. */
+.list-group,
+.list-tree {
+  li:not(.list-nested-item),
+  li.list-nested-item > .list-item {
+    line-height: 22px;
+  }
+
+  li.selected:not(.list-nested-item),
+  li.selected.list-nested-item > .list-item {
+    color: var(--text-color-selected);
+  }
+}
+
+.list-group:focus,
+.list-tree:focus,
+.select-list {
+  --background-color-selected: var(--list-background-color-selected-focus);
+  --text-color-selected: var(--list-text-color-selected-focus);
+  --text-color-highlight: var(--list-text-color-selected-focus);
+}
+
+.tree-view {
+  --tree-view-root-header-height: 22px;
+  --tree-view-root-name-font-size: 11px;
+  --tree-view-root-name-font-weight: 700;
+  --tree-view-root-name-letter-spacing: 0;
+  --tree-view-root-name-text-transform: uppercase;
+  --button-background-color-selected: var(--background-color-selected);
+  --accent-bg-text-color: var(--text-color-selected);
+
+  &:focus {
+    --button-background-color-selected: var(--list-background-color-selected-focus);
+    --accent-bg-text-color: var(--list-text-color-selected-focus);
+  }
+}
+
+/* Controls */
+.btn,
+.btn.btn-default {
+  height: 26px;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-color);
+  border: 1px solid var(--button-border-color);
+  border-radius: var(--component-border-radius);
+  background: var(--button-background-color);
+  box-shadow: none;
+
+  &:hover,
+  &:active {
+    background: var(--button-background-color-hover);
+    box-shadow: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 1px solid var(--accent-color);
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  &.selected {
+    color: var(--button-text-color-selected);
+    background: var(--button-background-color-selected);
+  }
+}
+
+.btn.btn-primary,
+.btn.btn-info {
+  color: var(--accent-bg-text-color);
+  background: var(--accent-bg-color);
+
+  &:hover,
+  &:active {
+    background: var(--button-primary-background-color-hover);
+  }
+}
+
+.btn.btn-success,
+.btn.btn-warning,
+.btn.btn-error {
+  color: var(--vscode-button-variant-foreground);
+  background: var(--vscode-button-variant-background);
+
+  &:hover,
+  &:active {
+    background: hsl(from var(--vscode-button-variant-background) h s calc(l - 4));
+  }
+}
+
+.btn.btn-success {
+  --vscode-button-variant-foreground: var(--text-color-on-success);
+  --vscode-button-variant-background: var(--background-color-success);
+}
+
+.btn.btn-warning {
+  --vscode-button-variant-foreground: var(--text-color-on-warning);
+  --vscode-button-variant-background: var(--background-color-warning);
+}
+
+.btn.btn-error {
+  --vscode-button-variant-foreground: var(--text-color-on-error);
+  --vscode-button-variant-background: var(--background-color-error);
+}
+
+.btn:is(.disabled, [disabled]) {
+  opacity: 0.5;
+}
+
+.btn-group > .btn:first-child {
+  border-left: 1px solid var(--button-border-color);
+}
+
+.btn-group > .btn:last-child,
+.btn-group > .btn.selected:last-child {
+  border-right: 1px solid var(--button-border-color);
+}
+
+.input-text,
+.input-search,
+.input-number,
+.input-textarea,
+.input-select,
+.input-color {
+  font-size: var(--input-font-size);
+
+  &:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+lumine-text-editor:is([mini], [input]) {
+  &.is-focused {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: none;
+  }
+
+  .placeholder-text {
+    color: var(--text-color-hint);
+  }
+
+  .cursor {
+    border-color: var(--text-color);
+  }
+
+  .selection .region {
+    background: var(--input-selection-color);
+  }
+
+  &.is-focused .selection .region {
+    background: var(--input-selection-color-focus);
+  }
+}
+
+lumine-text-editor[mini] {
+  font-size: var(--input-font-size);
+  color: var(--text-color);
+  background: var(--input-background-color);
+}
+
+.input-checkbox {
+  border: 1px solid var(--input-border-color);
+  background: var(--vscode-checkbox-background);
+
+  &:checked,
+  &:indeterminate,
+  &:active {
+    background: var(--vscode-checkbox-background);
+  }
+
+  &::before,
+  &::after {
+    background: var(--text-color);
+  }
+
+  &&:focus {
+    outline: 1px solid var(--accent-color);
+    outline-offset: -1px;
+    box-shadow: none;
+  }
+}
+
+.input-radio.input-radio:focus,
+.input-toggle.input-toggle:focus,
+.input-range:focus {
+  outline: 1px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* Pickers use the existing core portal, overflow and separator behavior. */
+lumine-panel-container.modal {
+  position: absolute;
+  inset: 0 0 auto;
+}
+
+lumine-panel.modal {
+  width: min(600px, calc(100vw - 16px));
+  max-width: calc(100vw - 16px);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  padding: 6px;
+  border: 1px solid var(--overlay-border-color);
+  border-radius: 6px;
+  background: var(--overlay-background-color);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 24%);
+
+  &.from-top {
+    top: 8px;
+  }
+
+  lumine-text-editor[mini] {
+    margin-bottom: 4px;
+  }
+
+  .select-list ol.list-group,
+  &.select-list ol.list-group {
+    max-height: min(70vh, 440px);
+    margin-top: 4px;
+    border: none;
+    background: transparent;
+
+    > li:not(.select-list-separator) {
+      min-height: 22px;
+      padding: 0 6px;
+      line-height: 22px;
+      border: none;
+      border-radius: 3px;
+
+      .primary-line,
+      .secondary-line {
+        line-height: 22px;
+      }
+
+      &.two-lines,
+      &:has(> .secondary-line:not(:empty)) {
+        min-height: 44px;
+      }
+
+      &:hover:not(.selected) {
+        background-color: var(--background-color-highlight);
+        background-image: none;
+      }
+
+      &.selected {
+        color: var(--list-text-color-selected-focus);
+        background: var(--list-background-color-selected-focus);
+        outline: 1px solid var(--accent-color);
+        outline-offset: -1px;
+      }
+    }
+  }
+}
+
+/* Outlined package tags must not increase a single-line row's height. */
+lumine-workspace .select-list .tag {
+  padding-block: 0;
+  border-radius: var(--component-border-radius);
+  line-height: 18px;
+}
+
+.key-binding {
+  display: inline-block;
+  padding: 0 3px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 3px;
+  font-family: var(--font-family);
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--text-color);
+  background: var(--background-color-highlight);
+}
+
+.badge {
+  min-width: 18px;
+  padding: 3px 5px;
+  font-size: 11px;
+  color: var(--badge-text-color);
+  background: var(--badge-background-color);
+}
+
+/* Menus have their own selection role; it is distinct from a focused list. */
+lumine-context-view .menu-box,
+lumine-context-view .context-view-surface.menu-box {
+  background: var(--vscode-menu-background);
+
+  &:not(:hover) .menu-item.open:not(.disabled) {
+    color: var(--vscode-menu-selection-foreground);
+    background: var(--vscode-menu-selection-background);
+
+    .menu-item-keystroke {
+      color: inherit;
+    }
+  }
+
+  &:hover .menu-item.selected:not(:hover) {
+    color: var(--text-color);
+    background: transparent;
+
+    .menu-item-keystroke {
+      color: var(--text-color-subtle);
+    }
+  }
+
+  .menu-item {
+    &.selected:not(.disabled),
+    &:hover:not(.disabled),
+    &:active:not(.disabled) {
+      color: var(--vscode-menu-selection-foreground);
+      background: var(--vscode-menu-selection-background);
+
+      .menu-item-keystroke {
+        color: inherit;
+      }
+    }
+  }
+}
+
+/* Scrollbar colors include their native opacity, without an extra gutter. */
+.scrollbars-visible-always ::-webkit-scrollbar,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.scrollbars-visible-always ::-webkit-scrollbar-track,
+.scrollbars-visible-always ::-webkit-scrollbar-corner,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-track,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.scrollbars-visible-always ::-webkit-scrollbar-thumb,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-thumb {
+  border: none;
+  border-radius: 0;
+  background: var(--scrollbar-color);
+  background-clip: border-box;
+}
+
+.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-color-editor);
+}
+
+/* Chromium requires scrollbar-part states to be top-level selectors. */
+.scrollbars-visible-always ::-webkit-scrollbar-thumb:hover,
+lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-color-hover);
+}
+
+.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-color-editor-hover);
+}
+
+.tooltip.in {
+  opacity: 1;
+}
+
+.tooltip-inner {
+  text-align: left;
+  border: 1px solid var(--overlay-border-color);
+}
