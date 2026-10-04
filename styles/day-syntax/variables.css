@@ -40,6 +40,7 @@
   --syntax-color-method: #795e26;
   --syntax-color-class: #267f99;
   --syntax-color-keyword: #af00db;
+  --syntax-color-magic: #267f99;
   --syntax-color-tag: #800000;
   --syntax-color-attribute: #e50000;
   --syntax-color-import: #af00db;

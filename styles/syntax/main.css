@@ -157,6 +157,10 @@ lumine-text-editor:is([mini], [input]) .line.cursor-line {
   color: var(--syntax-color-function);
 }
 
+.syntax--support.syntax--function.syntax--magic.syntax--ipython {
+  color: var(--syntax-color-magic);
+}
+
 .syntax--entity.syntax--type,
 .syntax--entity.syntax--class,
 .syntax--entity.syntax--name.syntax--type,

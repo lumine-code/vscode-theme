@@ -126,6 +126,34 @@ describe("VS Code syntax in real grammar output", () => {
   });
 
   for (const mode of ["day", "night"]) {
+    it(`distinguishes ${mode} IPython magic commands and percent signs from Python directives`, async () => {
+      await lumine.packages.activatePackage("vscode-theme");
+      await lumine.packages.activatePackage(`vscode-${mode}-syntax`);
+      const colorOfToken = (classes, value = null) => {
+        const token = document.createElement("span");
+        token.className = classes.map((name) => `syntax--${name}`).join(" ");
+        if (value) token.style.color = value;
+        document.body.appendChild(token);
+        const color = getComputedStyle(token).color;
+        token.remove();
+        return color;
+      };
+      const magicClasses = ["support", "function", "magic", "ipython"];
+      const magicColor = colorOfToken([], "var(--syntax-color-magic)");
+      expect(colorOfToken(magicClasses)).toBe(magicColor);
+      expect(colorOfToken([...magicClasses, "punctuation", "definition"])).toBe(magicColor);
+      for (const directiveClasses of [
+        ["keyword", "control", "conditional", "if"],
+        ["keyword", "control", "import"],
+        ["storage", "type", "function"],
+      ]) {
+        expect(colorOfToken([...directiveClasses, "python"])).not.toBe(magicColor);
+      }
+      expect(colorOfToken(["support", "function", "magic", "python"])).toBe(
+        colorOfToken(["support", "function", "python"]),
+      );
+    });
+
     it(`shares the ${mode} focus state with real selected block decorations`, async () => {
       await lumine.packages.activatePackage("vscode-theme");
       await lumine.packages.activatePackage(`vscode-${mode}-syntax`);
