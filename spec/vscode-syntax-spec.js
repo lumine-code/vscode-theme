@@ -126,6 +126,33 @@ describe("VS Code syntax in real grammar output", () => {
   });
 
   for (const mode of ["day", "night"]) {
+    it(`respects independent ${mode} public property, value, method and import roles`, async () => {
+      await lumine.packages.activatePackage("vscode-theme");
+      await lumine.packages.activatePackage(`vscode-${mode}-syntax`);
+      const fixture = document.createElement("div");
+      document.body.appendChild(fixture);
+      try {
+        for (const [role, scopes] of [
+          ["property", ["property"]],
+          ["property", ["variable", "other", "property"]],
+          ["value", ["entity", "value"]],
+          ["method", ["entity", "name", "function", "method"]],
+          ["method", ["support", "function", "any-method"]],
+          ["import", ["keyword", "control", "import"]],
+        ]) {
+          fixture.style.setProperty(`--syntax-color-${role}`, "rgb(1, 2, 3)");
+          const token = document.createElement("span");
+          token.className = scopes.map((scope) => `syntax--${scope}`).join(" ");
+          fixture.appendChild(token);
+          expect(getComputedStyle(token).color).withContext(scopes.join(" ")).toBe("rgb(1, 2, 3)");
+          token.remove();
+          fixture.style.removeProperty(`--syntax-color-${role}`);
+        }
+      } finally {
+        fixture.remove();
+      }
+    });
+
     it(`distinguishes ${mode} IPython magic commands and percent signs from Python directives`, async () => {
       await lumine.packages.activatePackage("vscode-theme");
       await lumine.packages.activatePackage(`vscode-${mode}-syntax`);

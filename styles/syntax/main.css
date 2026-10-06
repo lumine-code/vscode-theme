@@ -123,12 +123,27 @@ lumine-text-editor:is([mini], [input]) .line.cursor-line {
 }
 
 .syntax--variable,
-.syntax--property,
 .syntax--entity.syntax--parameter,
 .syntax--entity.syntax--name.syntax--variable,
 .syntax--support.syntax--variable,
 .syntax--constant.syntax--other.syntax--placeholder {
   color: var(--syntax-color-variable);
+}
+
+.syntax--property,
+.syntax--entity.syntax--property,
+.syntax--variable.syntax--other.syntax--property {
+  color: var(--syntax-color-property);
+}
+
+.syntax--value,
+.syntax--entity.syntax--value {
+  color: var(--syntax-color-value);
+}
+
+.syntax--keyword.syntax--control.syntax--import,
+.syntax--storage.syntax--modifier.syntax--import {
+  color: var(--syntax-color-import);
 }
 
 .syntax--variable.syntax--language,
@@ -159,6 +174,13 @@ lumine-text-editor:is([mini], [input]) .line.cursor-line {
 
 .syntax--support.syntax--function.syntax--magic.syntax--ipython {
   color: var(--syntax-color-magic);
+}
+
+.syntax--entity.syntax--method,
+.syntax--entity.syntax--function.syntax--method,
+.syntax--entity.syntax--name.syntax--function.syntax--method,
+.syntax--support.syntax--function.syntax--any-method {
+  color: var(--syntax-color-method);
 }
 
 .syntax--entity.syntax--type,

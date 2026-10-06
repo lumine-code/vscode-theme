@@ -147,6 +147,42 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         expect(overlay.getBoundingClientRect().left).toBe(control.getBoundingClientRect().left);
         control.remove();
       });
+      it("keeps selected tree controls on the local focused and blurred color pairs with a system accent", async () => {
+        spyOn(lumine.themes.applicationDelegate, "invokeApp").and.returnValue(
+          Promise.resolve("#ddeeff"),
+        );
+        lumine.config.set("theme.accentSource", "system");
+        await lumine.themes.refreshSystemAccentColor();
+        expect(color("var(--accent-background-color)")).toBe(color("#ddeeff"));
+        const tree = document.createElement("div");
+        tree.className = "tree-view";
+        tree.tabIndex = 0;
+        const button = document.createElement("button");
+        button.className = "btn selected";
+        button.textContent = "Selected";
+        tree.appendChild(button);
+        document.body.appendChild(tree);
+        disposables.push({ dispose: () => tree.remove() });
+
+        for (const focused of [false, true]) {
+          if (focused) tree.focus();
+          else tree.blur();
+          expect(document.activeElement === tree).toBe(focused);
+          const style = getComputedStyle(button);
+          expect(style.backgroundColor).toBe(
+            color(
+              expected[
+                focused ? "list.activeSelectionBackground" : "list.inactiveSelectionBackground"
+              ],
+            ),
+          );
+          expect(style.color).toBe(
+            color(
+              focused ? expected["list.activeSelectionForeground"] : "var(--text-color-selected)",
+            ),
+          );
+        }
+      });
       it("keeps real command-palette rows compact until their descriptions are shown", async () => {
         const plainCommand = "aaa-vscode-ui:plain-action";
         const describedCommand = "aaa-vscode-ui:described-action";
@@ -331,10 +367,17 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
     );
     lumine.config.set("theme.accentSource", "system");
     await lumine.themes.refreshSystemAccentColor();
-    expect(color("var(--accent-bg-color)")).toBe(color("#112233"));
+    expect(color("var(--accent-background-color)")).toBe(color("#112233"));
+    expect(color("var(--progress-background-color)")).toBe(color("#112233"));
+    const button = document.createElement("button");
+    button.className = "btn selected";
+    document.body.appendChild(button);
+    disposables.push({ dispose: () => button.remove() });
+    expect(getComputedStyle(button).backgroundColor).toBe(color("#112233"));
+    expect(getComputedStyle(button).color).toBe(color("var(--accent-foreground-color)"));
     lumine.config.set("theme.accentSource", "theme");
     lumine.themes.applyAccentColor();
-    expect(color("var(--accent-bg-color)")).toBe(
+    expect(color("var(--accent-background-color)")).toBe(
       color(reference.modes.night.colors["button.background"]),
     );
   });
