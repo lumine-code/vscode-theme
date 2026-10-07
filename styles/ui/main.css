@@ -194,15 +194,12 @@ lumine-dock .tab-bar .tab {
   --tree-view-root-name-font-weight: 700;
   --tree-view-root-name-letter-spacing: 0;
   --tree-view-root-name-text-transform: uppercase;
-  --button-background-color-selected: var(--background-color-selected);
-  --button-text-color-selected: var(--text-color-selected);
-  /* Rows read the accent foreground; buttons read their own selected role. */
-  --accent-foreground-color: var(--text-color-selected);
+  --tree-view-selection-background-color: var(--background-color-selected);
+  --tree-view-selection-foreground-color: var(--text-color-selected);
 
   &:focus {
-    --button-background-color-selected: var(--list-background-color-selected-focus);
-    --button-text-color-selected: var(--list-text-color-selected-focus);
-    --accent-foreground-color: var(--list-text-color-selected-focus);
+    --tree-view-selection-background-color: var(--list-background-color-selected-focus);
+    --tree-view-selection-foreground-color: var(--list-text-color-selected-focus);
   }
 }
 

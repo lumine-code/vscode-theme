@@ -147,7 +147,7 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         expect(overlay.getBoundingClientRect().left).toBe(control.getBoundingClientRect().left);
         control.remove();
       });
-      it("keeps selected tree controls on the local focused and blurred color pairs with a system accent", async () => {
+      it("keeps primary and selected tree controls on the accent pair independently of sidebar selection", async () => {
         spyOn(lumine.themes.applicationDelegate, "invokeApp").and.returnValue(
           Promise.resolve("#ddeeff"),
         );
@@ -157,10 +157,8 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         const tree = document.createElement("div");
         tree.className = "tree-view";
         tree.tabIndex = 0;
-        const button = document.createElement("button");
-        button.className = "btn selected";
-        button.textContent = "Selected";
-        tree.appendChild(button);
+        tree.innerHTML =
+          '<button class="btn selected">Selected</button><button class="btn btn-primary">Add Folders</button>';
         document.body.appendChild(tree);
         disposables.push({ dispose: () => tree.remove() });
 
@@ -168,19 +166,11 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
           if (focused) tree.focus();
           else tree.blur();
           expect(document.activeElement === tree).toBe(focused);
-          const style = getComputedStyle(button);
-          expect(style.backgroundColor).toBe(
-            color(
-              expected[
-                focused ? "list.activeSelectionBackground" : "list.inactiveSelectionBackground"
-              ],
-            ),
-          );
-          expect(style.color).toBe(
-            color(
-              focused ? expected["list.activeSelectionForeground"] : "var(--text-color-selected)",
-            ),
-          );
+          for (const button of tree.children) {
+            const style = getComputedStyle(button);
+            expect(style.backgroundColor).toBe(color("#ddeeff"));
+            expect(style.color).toBe(color("var(--accent-foreground-color)"));
+          }
         }
       });
       it("keeps real command-palette rows compact until their descriptions are shown", async () => {

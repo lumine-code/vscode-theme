@@ -126,6 +126,20 @@ describe("VS Code syntax in real grammar output", () => {
   });
 
   for (const mode of ["day", "night"]) {
+    it(`uses the ${mode} active gutter background token`, async () => {
+      await lumine.packages.activatePackage("vscode-theme");
+      await lumine.packages.activatePackage(`vscode-${mode}-syntax`);
+      editor = await lumine.workspace.open();
+      editor.setText("first\nsecond");
+      const view = lumine.views.getView(editor);
+      jasmine.attachToDOM(lumine.views.getView(lumine.workspace));
+      view.style.setProperty("--syntax-gutter-background-color-selected", "rgb(1, 2, 3)");
+      await waitForFrames(() => view.querySelector(".active-line-number"));
+      expect(getComputedStyle(view.querySelector(".active-line-number")).backgroundColor).toBe(
+        "rgb(1, 2, 3)",
+      );
+    });
+
     it(`respects independent ${mode} public property, value, method and import roles`, async () => {
       await lumine.packages.activatePackage("vscode-theme");
       await lumine.packages.activatePackage(`vscode-${mode}-syntax`);

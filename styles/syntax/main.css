@@ -26,6 +26,7 @@ lumine-text-editor {
 
       &.active-line-number {
         color: var(--syntax-gutter-text-color-selected);
+        background-color: var(--syntax-gutter-background-color-selected);
       }
 
       .icon-right {
