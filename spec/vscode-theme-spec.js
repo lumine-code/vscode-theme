@@ -239,6 +239,145 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
           `${reference.geometry.quickInputRowHeight}px`,
         );
       });
+      for (const width of [600, 260])
+        it(`contains picker labels and chips in compact rows at ${width}px`, async () => {
+          const longName = "repository-with-a-very-long-name-".repeat(8);
+          const longPath = "C:/Projects/" + "nested-directory/".repeat(12);
+          const items = [
+            {
+              primary: longName,
+              secondary: longPath,
+              icon: ["icon-repo"],
+              trailing: [
+                { text: "+2 −1", className: "text-subtle" },
+                { text: "master", className: "badge badge-info" },
+              ],
+            },
+            {
+              primary: longName,
+              secondary: "a1b2c3d " + "A long commit subject ".repeat(12),
+              icon: ["icon-git-branch"],
+              trailing: [
+                { text: "↑2", className: "text-subtle" },
+                { text: "current", className: "badge" },
+              ],
+            },
+            {
+              primary: longName,
+              secondary: longPath,
+              icon: ["icon-file-directory"],
+              trailing: [
+                { text: "locked", className: "badge badge-warning" },
+                { text: "master", className: "badge badge-info" },
+              ],
+            },
+            {
+              primary: longName,
+              icon: ["icon-plus"],
+              trailing: [
+                { text: "action", className: "tag" },
+                { text: "Ctrl+Enter", className: "key-binding" },
+              ],
+            },
+          ].map((item, id) => ({ ...item, id }));
+          const host = lumine.workspace.addSelectList({
+            items,
+            renderItem: (item) => item,
+          });
+          disposables.push(host);
+          await host.show();
+          host.getPanel().getElement().style.width = `${width}px`;
+          const rows = host.getModel().getElement().querySelectorAll("ol.list-group > li");
+          expect(rows.length).toBe(items.length);
+          const contained = (element, container) => {
+            const inner = element.getBoundingClientRect();
+            const outer = container.getBoundingClientRect();
+            expect(inner.left).toBeGreaterThanOrEqual(outer.left - 0.5);
+            expect(inner.right).toBeLessThanOrEqual(outer.right + 0.5);
+            expect(inner.top).toBeGreaterThanOrEqual(outer.top - 0.5);
+            expect(inner.bottom).toBeLessThanOrEqual(outer.bottom + 0.5);
+          };
+          for (const [index, row] of Array.from(rows).entries()) {
+            const primary = row.querySelector(".primary-line");
+            const label = primary.querySelector(".primary-text");
+            const trailing = primary.querySelector(".trailing-block");
+            const secondary = row.querySelector(".secondary-line");
+            const rowHeight = reference.geometry.quickInputRowHeight;
+            expect(row.getBoundingClientRect().height).toBe(
+              rowHeight * (items[index].secondary ? 2 : 1),
+            );
+            expect(primary.getBoundingClientRect().height).toBe(rowHeight);
+            contained(primary, row);
+            contained(label, primary);
+            contained(trailing, primary);
+            expect(label.scrollWidth).toBeGreaterThan(label.clientWidth);
+            expect(getComputedStyle(label).textOverflow).toBe("ellipsis");
+            expect(getComputedStyle(label).overflowX).toBe("hidden");
+            if (secondary) {
+              contained(secondary, row);
+              expect(secondary.scrollWidth).toBeGreaterThan(secondary.clientWidth);
+              expect(getComputedStyle(secondary).textOverflow).toBe("ellipsis");
+            }
+            const lineRect = primary.getBoundingClientRect();
+            for (const chip of trailing.children) {
+              contained(chip, primary);
+              const chipRect = chip.getBoundingClientRect();
+              expect(
+                Math.abs(chipRect.top + chipRect.height / 2 - (lineRect.top + rowHeight / 2)),
+              ).toBeLessThanOrEqual(0.5);
+            }
+          }
+        });
+      it("lets custom picker rows grow around multiple and wrapped descriptions", async () => {
+        const host = lumine.workspace.addSelectList({
+          items: ["multiple", "wrapped"],
+          renderItem: (item) => {
+            const row = document.createElement("li");
+            row.className = "two-lines";
+            const primary = document.createElement("div");
+            primary.className = "primary-line";
+            primary.textContent = "Custom row";
+            row.appendChild(primary);
+            if (item === "multiple") {
+              for (const path of ["C:/Projects/one", "C:/Projects/two", "C:/Projects/three"]) {
+                const secondary = document.createElement("div");
+                secondary.className = "secondary-line";
+                secondary.textContent = path;
+                row.appendChild(secondary);
+              }
+            } else {
+              const secondary = document.createElement("div");
+              secondary.className = "secondary-line";
+              secondary.textContent = "A bibliography summary that deliberately wraps. ".repeat(8);
+              secondary.style.whiteSpace = "normal";
+              row.appendChild(secondary);
+            }
+            return row;
+          },
+        });
+        disposables.push(host);
+        await host.show();
+        host.getPanel().getElement().style.width = "260px";
+        const [multiple, wrapped] = host
+          .getModel()
+          .getElement()
+          .querySelectorAll("ol.list-group > li");
+        const rowHeight = reference.geometry.quickInputRowHeight;
+        expect(multiple.getBoundingClientRect().height).toBe(rowHeight * 4);
+        const summary = wrapped.querySelector(".secondary-line");
+        expect(summary.getBoundingClientRect().height).toBeGreaterThan(rowHeight);
+        expect(wrapped.getBoundingClientRect().height).toBe(
+          rowHeight + summary.getBoundingClientRect().height,
+        );
+        for (const row of [multiple, wrapped]) {
+          const rowRect = row.getBoundingClientRect();
+          for (const line of row.children) {
+            const lineRect = line.getBoundingClientRect();
+            expect(lineRect.top).toBeGreaterThanOrEqual(rowRect.top);
+            expect(lineRect.bottom).toBeLessThanOrEqual(rowRect.bottom);
+          }
+        }
+      });
       it("uses dedicated menu colors in a real command popup", async () => {
         const anchor = document.createElement("button");
         anchor.style.cssText = "position: fixed; left: 100px; top: 100px";
