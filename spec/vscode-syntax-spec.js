@@ -268,7 +268,7 @@ describe("VS Code syntax in real grammar output", () => {
           const index = editor.getText().indexOf(needle);
           expect(index).not.toBe(-1);
           const point = editor.getBuffer().positionForCharacterIndex(index + offset);
-          editor.scrollToBufferPosition(point, { center: true });
+          editor.scrollToBufferPosition(point, { mode: "center" });
           view.getComponent().updateSync();
           const screenPoint = editor.screenPositionForBufferPosition(point);
           const line = view.querySelector(`.lines .line[data-screen-row="${screenPoint.row}"]`);
