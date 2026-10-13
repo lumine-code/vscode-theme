@@ -13,6 +13,10 @@ The VS Code day and night UI and syntax themes following the VS Code Modern look
 
 The reference is VS Code 1.139.1 with Dark Modern and Light Modern. The themes preserve the editor's layout and icons while adapting the reference colors and metrics to its existing surfaces.
 
+![VS Code Modern in light mode.](.github/demo.png)
+
+![VS Code Modern in dark mode.](.github/demo-2.png)
+
 ## Installation
 
 To install `vscode-theme` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/vscode-theme`.

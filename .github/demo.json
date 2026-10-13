@@ -1,0 +1,22 @@
+{
+  "title": "vscode-theme",
+  "description": "The VS Code Modern theme in light and dark modes.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "c00e096c7c35a863891f8678b381914d9583e860",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "VS Code Modern in light mode.",
+      "width": 1200,
+      "height": 760
+    },
+    {
+      "file": "demo-2.png",
+      "label": "VS Code Modern in dark mode.",
+      "width": 1200,
+      "height": 760
+    }
+  ]
+}
