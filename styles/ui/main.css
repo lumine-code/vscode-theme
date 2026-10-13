@@ -302,6 +302,8 @@ lumine-dock .tab-bar .tab {
 }
 
 lumine-text-editor:is([mini], [input]) {
+  border-color: var(--button-border-color);
+
   &.is-focused {
     border-color: var(--accent-indicator-color);
     outline: none;
