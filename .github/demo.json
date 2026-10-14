@@ -1,22 +1,78 @@
 {
   "title": "vscode-theme",
-  "description": "The VS Code Modern theme in light and dark modes.",
-  "recordedOn": "2026-10-13",
-  "sourceRevision": "c00e096c7c35a863891f8678b381914d9583e860",
+  "description": "VS Code Modern in light mode.",
+  "recordedOn": "2026-10-14",
+  "sourceRevision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
   "mode": "normal",
   "fontSettings": "default",
+  "scenario": "demo.js",
+  "recipeHash": "aa894e88c6da304b1d70e1249f4f7f3635b650aa05af4db25961c76748d37744",
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130",
+    "devicePixelRatio": 1,
+    "locale": "en-GB",
+    "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
+    "fontSize": 14,
+    "themes": ["one-day-syntax", "one-day-ui"]
+  },
+  "viewport": { "width": 1200, "height": 760 },
+  "cornerRadius": 10,
+  "sources": {
+    "editor": {
+      "revision": "8be8f86075ad93df038610d82b3ac6d99329957d",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "package": {
+      "revision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "vscode-theme": {
+      "revision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "language-javascript": {
+      "revision": "ae2e6968e3a349fb4d09ce53e339a0f8cce903aa",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "one-theme": {
+      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "tree-view": {
+      "revision": "fe6f35de06f036837aa9c2d3b138b3d72557bcc4",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "themes/signal.js",
+      "sha256": "2a36953daadd1ae53070d0ff7ceab4624395fdb957104aa6e8ec92d785cadf1d"
+    }
+  ],
   "images": [
     {
       "file": "demo.png",
       "label": "VS Code Modern in light mode.",
       "width": 1200,
-      "height": 760
+      "height": 760,
+      "sha256": "768fe4760076e0c99a06be7ca78b641befb12e901da0a4c32bcd94176b82e9a9"
     },
     {
       "file": "demo-2.png",
       "label": "VS Code Modern in dark mode.",
       "width": 1200,
-      "height": 760
+      "height": 760,
+      "sha256": "da1352a4996a1fbd371b3717f272be20c7ae5d3d61ccb53d728ee7e81931194c"
     }
   ]
 }
