@@ -9,7 +9,7 @@ const runtimeModules = ["lumine"];
 
 module.exports = [
   // These are source documents parsed by the grammar integration tests.
-  { ignores: ["spec/fixtures/syntax/**"] },
+  { ignores: ["spec/fixtures/syntax/**", "demo/**"] },
   js.configs.recommended,
   n.configs["flat/recommended-script"],
   {
