@@ -472,6 +472,14 @@ lumine-workspace .select-list .tag {
   background: var(--badge-background-color);
 }
 
+.highlight,
+.highlight-info,
+.highlight-success,
+.highlight-warning,
+.highlight-error {
+  padding: 1px 4px;
+}
+
 /* Menus have their own selection role; it is distinct from a focused list. */
 lumine-context-view .menu-box,
 lumine-context-view .context-view-surface.menu-box {

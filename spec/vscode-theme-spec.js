@@ -385,11 +385,13 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         disposables.push({ dispose: () => anchor.remove() });
         const popup = lumine.menu.showPopup({
           anchor,
-          template: [{ label: "Open", command: "core:open-file" }],
+          target: lumine.views.getView(lumine.workspace),
+          template: [{ label: "Open", command: "application:open-file" }],
         });
         disposables.push(popup);
         popup.rootList.selectItem(popup.rootList.items[0], { focus: true });
         const item = popup.element.querySelector(".menu-item");
+        expect(item.classList.contains("disabled")).toBe(false);
         // Background-color transitions settle on the native rendering clock.
         await waitForFrames(
           () =>
