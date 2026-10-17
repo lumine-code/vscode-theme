@@ -23,11 +23,13 @@ module.exports = {
         const { lumine } = context;
         {
           lumine.config.set("theme.mode", "light");
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await lumine.themes.whenThemesSettled();
         }
       },
-      ready() {
+      ready({ lumine }) {
         return Boolean(
+          lumine.themes.getActiveThemeNames().includes("vscode-day-ui") &&
+          lumine.themes.getActiveThemeNames().includes("vscode-day-syntax") &&
           document.querySelector("lumine-workspace")?.getBoundingClientRect().height > 0 &&
           document.body.innerText.trim().length > 0,
         );
@@ -42,11 +44,13 @@ module.exports = {
         const { lumine } = context;
         {
           lumine.config.set("theme.mode", "dark");
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await lumine.themes.whenThemesSettled();
         }
       },
-      ready() {
+      ready({ lumine }) {
         return Boolean(
+          lumine.themes.getActiveThemeNames().includes("vscode-night-ui") &&
+          lumine.themes.getActiveThemeNames().includes("vscode-night-syntax") &&
           document.querySelector("lumine-workspace")?.getBoundingClientRect().height > 0 &&
           document.body.innerText.trim().length > 0,
         );

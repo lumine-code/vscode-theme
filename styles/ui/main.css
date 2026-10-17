@@ -240,8 +240,7 @@ lumine-dock .tab-bar .tab {
   color: var(--accent-foreground-color);
   background: var(--accent-background-color);
 
-  &:hover,
-  &:active {
+  &:is(:hover, :active):not(.selected) {
     background: var(--button-primary-background-color-hover);
   }
 }
@@ -252,9 +251,12 @@ lumine-dock .tab-bar .tab {
   color: var(--vscode-button-variant-foreground);
   background: var(--vscode-button-variant-background);
 
-  &:hover,
-  &:active {
-    background: hsl(from var(--vscode-button-variant-background) h s calc(l - 4));
+  &:is(:hover, :active):not(.selected) {
+    --vscode-button-state-background: hsl(
+      from var(--vscode-button-variant-background) h s calc(l - 4)
+    );
+    color: lch(from var(--vscode-button-state-background) calc((49.44 - l) * infinity) 0 0);
+    background: var(--vscode-button-state-background);
   }
 }
 
