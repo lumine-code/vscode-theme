@@ -1,18 +1,18 @@
 {
   "title": "vscode-theme",
   "description": "VS Code Modern in light mode.",
-  "recordedOn": "2026-10-14",
-  "sourceRevision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
-  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+  "recordedOn": "2026-10-17",
+  "sourceRevision": "e74fb666bf62c66e74748bcddc35af906759de5f",
+  "themeSourceRevision": "b21061337d66efa495595ae52bcff759a06f79f7",
   "mode": "normal",
   "fontSettings": "default",
   "scenario": "demo.js",
-  "recipeHash": "aa894e88c6da304b1d70e1249f4f7f3635b650aa05af4db25961c76748d37744",
+  "recipeHash": "ff8f4eb52abdfbcda7f53821e26d3a44fe81aed6b92b76b47c69eab385c54b15",
   "environment": {
     "platform": "win32",
     "arch": "x64",
-    "electron": "44.7.0",
-    "chrome": "152.0.7977.130",
+    "electron": "44.8.0",
+    "chrome": "152.0.7977.167",
     "devicePixelRatio": 1,
     "locale": "en-GB",
     "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
@@ -21,34 +21,35 @@
   },
   "viewport": { "width": 1200, "height": 760 },
   "cornerRadius": 10,
+  "privacy": { "version": 1, "location": "neutral", "textChecked": true },
   "sources": {
     "editor": {
-      "revision": "8be8f86075ad93df038610d82b3ac6d99329957d",
-      "dirty": false,
-      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      "revision": "00525741924809abb3f21b2197a00065a1b2d7dc",
+      "dirty": true,
+      "workingTreeHash": "aa65c5235bbf2323156ba808240561d13a0f6bb098250f9df132031b72c4e1b8"
     },
     "package": {
-      "revision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+      "revision": "e74fb666bf62c66e74748bcddc35af906759de5f",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "vscode-theme": {
-      "revision": "8dcf3d2cba22f2d9fe407527fab466a8a7501619",
+      "revision": "e74fb666bf62c66e74748bcddc35af906759de5f",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "language-javascript": {
-      "revision": "ae2e6968e3a349fb4d09ce53e339a0f8cce903aa",
+      "revision": "043d75bfaa5bef24edeb5cc36f5c9ec396d01497",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "one-theme": {
-      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+      "revision": "b21061337d66efa495595ae52bcff759a06f79f7",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "tree-view": {
-      "revision": "fe6f35de06f036837aa9c2d3b138b3d72557bcc4",
+      "revision": "9c2061cd89333f849c3a630cee706888ffc31755",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     }
@@ -72,7 +73,7 @@
       "label": "VS Code Modern in dark mode.",
       "width": 1200,
       "height": 760,
-      "sha256": "da1352a4996a1fbd371b3717f272be20c7ae5d3d61ccb53d728ee7e81931194c"
+      "sha256": "d323bed2d85ef7e099fc49fb970ace097a4e5b85f6b6e3fc08c6782deef5883a"
     }
   ]
 }
