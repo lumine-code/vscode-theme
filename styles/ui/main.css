@@ -158,6 +158,11 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
   background: var(--accent-indicator-color);
 }
 
+/* Docks mark only the selected tab whose pane has focus. */
+lumine-dock .pane:not(:focus-within) .tab-bar .tab::before {
+  display: none;
+}
+
 lumine-dock .tab-bar .tab {
   max-width: none;
 
