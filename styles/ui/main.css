@@ -227,8 +227,7 @@ lumine-dock .tab-bar .tab {
     box-shadow: none;
   }
 
-  &:focus,
-  &.focus {
+  &:focus-visible {
     outline: 1px solid var(--accent-indicator-color);
     outline-offset: 2px;
     box-shadow: none;
@@ -300,12 +299,17 @@ lumine-dock .tab-bar .tab {
 .input-select,
 .input-color {
   font-size: var(--ui-input-font-size);
+}
 
-  &:focus {
-    border-color: var(--accent-indicator-color);
-    outline: none;
-    box-shadow: none;
-  }
+.input-text:focus,
+.input-search:focus,
+.input-number:focus,
+.input-textarea:focus,
+.input-select:focus-visible,
+.input-color:focus-visible {
+  border-color: var(--accent-indicator-color);
+  outline: none;
+  box-shadow: none;
 }
 
 lumine-text-editor:is([mini], [input]) {
@@ -355,16 +359,16 @@ lumine-text-editor[mini] {
     background: var(--text-color);
   }
 
-  &&:focus {
+  &&:focus-visible {
     outline: 1px solid var(--accent-indicator-color);
     outline-offset: -1px;
     box-shadow: none;
   }
 }
 
-.input-radio.input-radio:focus,
-.input-toggle.input-toggle:focus,
-.input-range:focus {
+.input-radio.input-radio:focus-visible,
+.input-toggle.input-toggle:focus-visible,
+.input-range:focus-visible {
   outline: 1px solid var(--accent-indicator-color);
   outline-offset: 2px;
   box-shadow: none;

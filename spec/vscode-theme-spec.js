@@ -442,7 +442,12 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         expect(style.borderTopWidth).toBe(`${reference.geometry.buttonBorderWidth}px`);
         expect(style.backgroundColor).toBe(color(expected["button.background"]));
         expect(style.color).toBe(color(expected["button.foreground"]));
+        const input = document.createElement("input");
+        document.body.appendChild(input);
+        input.focus();
         button.focus();
+        input.remove();
+        expect(button.matches(":focus-visible")).toBe(true);
         expect(getComputedStyle(button).outlineWidth).toBe("1px");
         expect(getComputedStyle(button).outlineColor).toBe(color(expected.focusBorder));
         expect(getComputedStyle(button).boxShadow).toBe("none");
