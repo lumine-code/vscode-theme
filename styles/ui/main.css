@@ -545,45 +545,14 @@ lumine-context-view .context-view-surface.menu-box {
   }
 }
 
-/* Scrollbar colors include their native opacity, without an extra gutter. */
-.scrollbars-visible-always ::-webkit-scrollbar,
-lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
-}
-
-.scrollbars-visible-always ::-webkit-scrollbar-track,
-.scrollbars-visible-always ::-webkit-scrollbar-corner,
-lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-track,
-lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-.scrollbars-visible-always ::-webkit-scrollbar-thumb,
-lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-thumb {
+/* Overlay geometry and interaction are owned by core. */
+.lumine-scrollbar > .scrollbar-thumb {
   border: none;
   border-radius: 0;
-  background: var(--scrollbar-color);
   background-clip: border-box;
 }
-
-.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-color-editor);
-}
-
-/* Chromium requires scrollbar-part states to be top-level selectors. */
-.scrollbars-visible-always ::-webkit-scrollbar-thumb:hover,
-lumine-context-view :is(.menu-box, .select-box-list)::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-color-hover);
-}
-
-.scrollbars-visible-always lumine-text-editor ::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-color-editor-hover);
+lumine-workspace {
+  --scrollbar-size-editor: 14px;
 }
 
 .tooltip.in {
