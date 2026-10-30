@@ -554,6 +554,10 @@ lumine-context-view .context-view-surface.menu-box {
 lumine-workspace {
   --scrollbar-size-editor: 14px;
 }
+:root {
+  --scrollbar-background-color: transparent;
+  --scrollbar-background-color-editor: transparent;
+}
 
 .tooltip.in {
   opacity: 1;

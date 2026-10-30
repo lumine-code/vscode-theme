@@ -444,14 +444,26 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         );
       });
       it("styles real popup scrollbars with reference width and opacity", async () => {
-        const select = lumine.menu.createSelectBox({ items: ["Light", "Dark"], value: "Light" });
+        const select = lumine.menu.createSelectBox({
+          items: ["Light", "Dark", ...Array.from({ length: 30 }, (_, index) => `Entry ${index}`)],
+          value: "Light",
+        });
         disposables.push(select);
         document.body.appendChild(select.element);
         await select.open();
         const list = select.listElement;
+        list.style.maxHeight = "100px";
         const controller = lumine.scrollbars.attach(list);
         disposables.push(controller);
         controller.write(controller.read());
+        expect(controller.geometry.layout).toBe("gutter");
+        expect(controller.layer.classList.contains("is-persistent")).toBeTrue();
+        const listStyle = getComputedStyle(list);
+        expect(list.offsetWidth - list.clientWidth).toBe(
+          parseFloat(listStyle.borderLeftWidth) +
+            parseFloat(listStyle.borderRightWidth) +
+            reference.geometry.popupScrollbarWidth,
+        );
         const thumb = getComputedStyle(controller.vertical.thumb);
         expect(getComputedStyle(controller.vertical.element).width).toBe(
           `${reference.geometry.popupScrollbarWidth}px`,
