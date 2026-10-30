@@ -60,6 +60,40 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
       await lumine.packages.deactivatePackage(name);
   });
 
+  it("gives shared dock close buttons the normal tab close surface and glyph size", async () => {
+    for (const mode of ["day", "night"]) {
+      await setMode(mode);
+      const fixture = document.createElement("div");
+      fixture.style.cssText = "font-size:12px;--ui-font-size:12px";
+      fixture.innerHTML =
+        '<ul class="tab-bar"><li class="tab active"><span class="close-icon"></span></li></ul><button class="dock-tab-close" style="font: inherit"><span class="close-icon"></span></button>';
+      jasmine.attachToDOM(fixture);
+      try {
+        const normal = fixture.querySelector(".tab .close-icon");
+        const shared = fixture.querySelector(".dock-tab-close > .close-icon");
+        for (const property of [
+          "width",
+          "height",
+          "fontSize",
+          "lineHeight",
+          "borderRadius",
+          "color",
+        ]) {
+          expect(getComputedStyle(shared)[property])
+            .withContext(`${mode} ${property}`)
+            .toBe(getComputedStyle(normal)[property]);
+        }
+        expect(getComputedStyle(shared).width).toBe("20px");
+        expect(getComputedStyle(shared, "::before").fontSize).toBe(
+          getComputedStyle(normal, "::before").fontSize,
+        );
+        expect(getComputedStyle(shared, "::before").fontSize).toBe("12px");
+      } finally {
+        fixture.remove();
+      }
+    }
+  });
+
   it("registers both pairs and loads only its own theme styles", async () => {
     const pack = lumine.themes.getThemePacks().find(({ name }) => name === "VS Code Modern");
     expect(pack.light).toEqual(["vscode-day-ui", "vscode-day-syntax"]);

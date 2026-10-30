@@ -43,11 +43,6 @@ lumine-workspace {
   .status-bar-item {
     padding-inline: 8px;
 
-    &:hover {
-      color: var(--vscode-status-hover-foreground);
-      background: var(--vscode-status-hover-background);
-    }
-
     &:focus-visible {
       outline: 1px solid var(--accent-indicator-color);
       outline-offset: -1px;
@@ -57,6 +52,12 @@ lumine-workspace {
   a:hover {
     text-decoration: none;
   }
+}
+
+.status-bar .status-bar-item:hover,
+.tab-bar.icons-only .tab:is(:hover, .is-hovered):not(.is-dragging) .title {
+  color: var(--vscode-status-hover-foreground);
+  background: var(--vscode-status-hover-background);
 }
 
 lumine-pane-container lumine-pane-axis.horizontal > lumine-pane-resize-handle {
@@ -80,10 +81,22 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
 }
 
 /* Tabs keep the package's drag, status and icon behavior. */
-.tab-bar {
-  height: var(--ui-tab-height);
+.tab-bar,
+.dock-tab-close {
   background: var(--tab-bar-background-color);
   box-shadow: inset 0 -1px var(--tab-bar-border-color);
+}
+
+.tab-bar .tab {
+  color: var(--tab-text-color);
+}
+
+.dock-tab-close {
+  color: var(--tab-text-color-active);
+}
+
+.tab-bar {
+  height: var(--ui-tab-height);
   overflow: auto hidden;
 
   &:empty {
@@ -106,7 +119,6 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
     font-size: var(--ui-font-size);
     line-height: var(--ui-tab-height);
     border-right: 1px solid var(--tab-border-color);
-    color: var(--tab-text-color);
     background: var(--tab-background-color);
 
     .title {
@@ -117,16 +129,7 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
     .close-icon {
       top: calc((var(--ui-tab-height) - 20px) / 2);
       right: 5px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      border-radius: var(--ui-border-radius);
       opacity: 0;
-
-      &:hover {
-        background: var(--background-color-highlight);
-      }
     }
 
     &:hover {
@@ -152,6 +155,20 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
       }
     }
   }
+}
+
+.tab-bar .tab .close-icon,
+.dock-tab-close > .close-icon {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: var(--ui-border-radius);
+}
+
+.tab-bar .tab .close-icon:hover,
+.dock-tab-close:hover:not(:disabled) > .close-icon {
+  background: var(--background-color-highlight);
 }
 
 .pane:focus-within .tab-bar .tab.active::before {
