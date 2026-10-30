@@ -102,6 +102,10 @@
   --ui-row-height: 22px;
   --ui-tab-height: 35px;
   --vscode-checkbox-background: #313131;
+  --choice-control-checkbox-background-color: var(--vscode-checkbox-background);
+  --choice-control-checkbox-border-color: var(--choice-control-border-color);
+  --choice-control-checkbox-mark-color: var(--text-color);
+  --choice-control-border-width: 1px;
   --vscode-menu-background: #1f1f1f;
   --vscode-menu-selection-background: var(--accent-background-color);
   --vscode-menu-selection-foreground: var(--accent-foreground-color);

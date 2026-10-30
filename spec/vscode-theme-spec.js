@@ -118,6 +118,72 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
       beforeEach(async () => {
         await setMode(mode);
       });
+      it("shares the neutral checkbox palette with menus while radio choices retain the accent", () => {
+        const fixture = document.createElement("div");
+        fixture.innerHTML =
+          '<input type="checkbox" class="input-checkbox"><span class="choice-control" aria-hidden="true" data-checked="false"></span><input type="radio" class="input-radio" checked><span class="choice-control choice-control-radio" aria-hidden="true" data-checked="true"></span>';
+        jasmine.attachToDOM(fixture);
+        try {
+          const [checkbox, indicator, radio, radioIndicator] = fixture.children;
+          const background = color("var(--vscode-checkbox-background)");
+          const border = color("var(--choice-control-border-color)");
+          const mark = color("var(--text-color)");
+          for (const state of ["off", "on", "mixed"]) {
+            checkbox.checked = state === "on";
+            checkbox.indeterminate = state === "mixed";
+            indicator.dataset.checked = state === "off" ? "false" : state === "on" ? "true" : state;
+            for (const control of [checkbox, indicator]) {
+              const style = getComputedStyle(control);
+              expect(style.backgroundColor).withContext(`${state} background`).toBe(background);
+              expect(style.borderTopColor).withContext(`${state} border`).toBe(border);
+              expect(style.borderTopWidth).withContext(`${state} border width`).toBe("1px");
+              for (const pseudo of ["::before", "::after"]) {
+                expect(getComputedStyle(control, pseudo).backgroundColor)
+                  .withContext(`${state} ${pseudo} mark`)
+                  .toBe(mark);
+              }
+            }
+          }
+          expect(getComputedStyle(indicator).borderRadius).toBe(
+            getComputedStyle(checkbox).borderRadius,
+          );
+          for (const control of [radio, radioIndicator]) {
+            expect(getComputedStyle(control).backgroundColor).toBe(
+              color("var(--accent-indicator-color)"),
+            );
+            expect(getComputedStyle(control, "::before").backgroundColor).toBe(
+              color("var(--accent-indicator-text-color)"),
+            );
+          }
+
+          // Text-field borders are intentionally subtle. Choice borders must
+          // still identify an unchecked box on both input and menu surfaces.
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 1;
+          const context = canvas.getContext("2d");
+          const luminance = (value) => {
+            context.fillStyle = value;
+            context.fillRect(0, 0, 1, 1);
+            const channels = context.getImageData(0, 0, 1, 1).data;
+            return [0.2126, 0.7152, 0.0722].reduce((sum, weight, index) => {
+              const channel = channels[index] / 255;
+              const linear =
+                channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+              return sum + weight * linear;
+            }, 0);
+          };
+          for (const surface of [background, color("var(--vscode-menu-background)")]) {
+            const levels = [luminance(border), luminance(surface)].sort((a, b) => a - b);
+            expect((levels[1] + 0.05) / (levels[0] + 0.05))
+              .withContext(`checkbox border against ${surface}`)
+              .toBeGreaterThanOrEqual(3);
+          }
+          expect(border).not.toBe(color("var(--input-border-color)"));
+        } finally {
+          fixture.remove();
+        }
+      });
+
       it("uses reference editor, tab and status-bar surfaces and heights", async () => {
         const statusPackage = await lumine.packages.activatePackage("status-bar");
         await lumine.packages.activatePackage("tabs");

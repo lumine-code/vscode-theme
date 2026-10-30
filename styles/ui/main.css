@@ -366,7 +366,7 @@ lumine-text-editor[mini] {
 }
 
 .input-checkbox {
-  border: 1px solid var(--input-border-color);
+  border: 1px solid var(--choice-control-checkbox-border-color, var(--input-border-color));
   background: var(--vscode-checkbox-background);
 
   &:checked,
