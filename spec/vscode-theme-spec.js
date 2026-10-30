@@ -449,11 +449,14 @@ describe("vscode-theme against the frozen VS Code Modern reference", () => {
         document.body.appendChild(select.element);
         await select.open();
         const list = select.listElement;
-        const thumb = getComputedStyle(list, "::-webkit-scrollbar-thumb");
-        expect(getComputedStyle(list, "::-webkit-scrollbar").width).toBe(
+        const controller = lumine.scrollbars.attach(list);
+        disposables.push(controller);
+        controller.write(controller.read());
+        const thumb = getComputedStyle(controller.vertical.thumb);
+        expect(getComputedStyle(controller.vertical.element).width).toBe(
           `${reference.geometry.popupScrollbarWidth}px`,
         );
-        expect(getComputedStyle(list, "::-webkit-scrollbar-track").backgroundColor).toBe(
+        expect(getComputedStyle(controller.vertical.element).backgroundColor).toBe(
           "rgba(0, 0, 0, 0)",
         );
         expect(thumb.borderTopWidth).toBe("0px");
