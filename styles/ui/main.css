@@ -171,16 +171,16 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
   background: var(--background-color-highlight);
 }
 
-.pane:focus-within .tab-bar .tab.active::before {
+.pane:is(:focus-within, :has(:focus)) .tab-bar .tab.active::before {
   background: var(--accent-indicator-color);
 }
 
-.pane:focus-within > .tab-bar.icons-only .tab.active .title {
+.pane:is(:focus-within, :has(:focus)) > .tab-bar.icons-only .tab.active .title {
   color: var(--accent-indicator-color);
 }
 
 /* Docks mark only the selected tab whose pane has focus. */
-lumine-dock .pane:not(:focus-within) .tab-bar .tab::before {
+lumine-dock .pane:not(:focus-within, :has(:focus)) .tab-bar .tab::before {
   display: none;
 }
 
