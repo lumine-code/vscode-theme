@@ -555,12 +555,30 @@ lumine-context-view .context-view-surface.menu-box {
   border-radius: 0;
   background-clip: border-box;
 }
+.lumine-scrollbar.horizontal:not(.is-dragging) > .scrollbar-thumb:not(:hover),
+::-webkit-scrollbar-thumb:horizontal:not(:hover):not(:active) {
+  background-color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--scrollbar-color) 25%, transparent),
+    color-mix(in srgb, var(--scrollbar-color) 40%, transparent)
+  );
+}
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--scrollbar-color-hover);
+}
+.xterm-scrollable-element > .scrollbar > .slider:is(:hover, .active),
+.xterm-scrollable-element > .xterm-scrollbar > .xterm-slider:is(:hover, .xterm-active) {
+  background-color: var(--scrollbar-color-editor-hover) !important;
+}
 lumine-workspace {
   --scrollbar-size-editor: 14px;
 }
 :root {
   --scrollbar-background-color: transparent;
   --scrollbar-background-color-editor: transparent;
+  --scrollbar-border-color: transparent;
 }
 
 .tooltip.in {

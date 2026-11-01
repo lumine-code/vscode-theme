@@ -42,7 +42,7 @@
   --button-border-color: rgba(255, 255, 255, 0.1);
   --tab-bar-background-color: #181818;
   --scrollbar-color: rgba(121, 121, 121, 0.4);
-  --scrollbar-color-hover: rgba(100, 100, 100, 0.7);
+  --scrollbar-color-hover: rgb(100, 100, 100);
   --ui-site-color-1: hsl(208, 100%, 50%);
   --ui-site-color-2: hsl(160, 70%, 42%);
   --ui-site-color-3: hsl(32, 60%, 50%);
@@ -86,7 +86,8 @@
   );
   --overlay-backdrop-color: hsl(0, 0%, 0%);
   --overlay-backdrop-opacity: 0;
-  --scrollbar-color-editor-hover: rgba(100, 100, 100, 0.7);
+  --scrollbar-color-editor: var(--scrollbar-color);
+  --scrollbar-color-editor-hover: var(--scrollbar-color-hover);
   --tab-text-color: #9d9d9d;
   --tab-text-color-active: var(--text-color-highlight);
   --tab-inactive-status-added: rgba(129, 184, 139, 0.55);
