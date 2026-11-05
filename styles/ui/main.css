@@ -1,5 +1,9 @@
 /* VS Code Modern appearance on Lumine's component and layout contract. */
 
+:root {
+  --pane-active-indicator-color: var(--tab-border-color);
+}
+
 /* Chrome */
 lumine-workspace {
   background: var(--app-background-color);
@@ -150,7 +154,7 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
         position: absolute;
         inset: 0 0 auto;
         height: 1px;
-        background: var(--tab-border-color);
+        background: var(--pane-active-indicator-color);
         pointer-events: none;
       }
     }
