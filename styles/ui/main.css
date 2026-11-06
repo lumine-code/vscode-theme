@@ -106,6 +106,7 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
 
 .tab-bar {
   height: var(--ui-tab-height);
+  border-radius: 0;
   overflow: auto hidden;
 
   &:empty {
@@ -128,6 +129,7 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
     font-size: var(--ui-font-size);
     line-height: var(--ui-tab-height);
     border-right: 1px solid var(--tab-border-color);
+    border-bottom: 1px solid var(--tab-bar-border-color);
     background: var(--tab-background-color);
 
     .title {
@@ -152,6 +154,7 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
 
     &.active {
       color: var(--tab-text-color-active);
+      border-bottom-color: transparent;
       background: var(--tab-background-color-active);
 
       &::before {
