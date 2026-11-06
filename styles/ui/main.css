@@ -58,10 +58,15 @@ lumine-workspace {
   }
 }
 
-.status-bar .status-bar-item:hover,
+.status-bar .status-bar-item:not(.accent-control):hover,
 .tab-bar.icons-only .tab:is(:hover, .is-hovered):not(.is-dragging) .title {
   color: var(--vscode-status-hover-foreground);
   background: var(--vscode-status-hover-background);
+}
+
+.status-bar .accent-control:focus-visible {
+  outline: 1px solid var(--accent-foreground-color);
+  outline-offset: -1px;
 }
 
 lumine-pane-container lumine-pane-axis.horizontal > lumine-pane-resize-handle {
@@ -252,22 +257,24 @@ lumine-dock .tab-bar .tab {
     box-shadow: none;
   }
 
-  &:focus-visible {
-    outline: 1px solid var(--accent-indicator-color);
-    outline-offset: 2px;
-    box-shadow: none;
-  }
-
   &.selected {
     color: var(--button-text-color-selected);
     background: var(--button-background-color-selected);
   }
 }
 
-.btn.btn-primary,
-.btn.btn-info {
+.btn:focus-visible,
+.btn.btn-default:focus-visible,
+.accent-control:focus-visible {
+  outline: 1px solid var(--accent-indicator-color);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+:is(.btn.btn-primary, .btn.btn-info, .accent-control) {
   color: var(--accent-foreground-color);
   background: var(--accent-background-color);
+  box-shadow: none;
 
   &:is(:hover, :active):not(.selected) {
     background: var(--button-primary-background-color-hover);
