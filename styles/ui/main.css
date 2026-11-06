@@ -180,16 +180,24 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
   background: var(--background-color-highlight);
 }
 
-.pane:is(:focus-within, :has(:focus)) .tab-bar .tab.active::before {
+body:not(.is-blurred)
+  .pane:is(.is-focused, :focus-within, :has(:focus))
+  .tab-bar
+  .tab.active::before {
   background: var(--accent-indicator-color);
 }
 
-.pane:is(:focus-within, :has(:focus)) > .tab-bar.icons-only .tab.active .title {
+body:not(.is-blurred)
+  .pane:is(.is-focused, :focus-within, :has(:focus))
+  > .tab-bar.icons-only
+  .tab.active
+  .title {
   color: var(--accent-indicator-color);
 }
 
-/* Docks mark only the selected tab whose pane has focus. */
-lumine-dock .pane:not(:focus-within, :has(:focus)) .tab-bar .tab::before {
+/* Docks mark only the selected tab whose pane and window have focus. */
+body.is-blurred lumine-dock .pane .tab-bar .tab::before,
+lumine-dock .pane:not(.is-focused, :focus-within, :has(:focus)) .tab-bar .tab::before {
   display: none;
 }
 

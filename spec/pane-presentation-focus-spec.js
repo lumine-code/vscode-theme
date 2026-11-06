@@ -41,6 +41,8 @@ jasmine.describeWithDocumentFocus("VS Code pane presentation focus markers", () 
       probe.style.color = "var(--accent-indicator-color)";
       bar.appendChild(probe);
       const accent = getComputedStyle(probe).color;
+      probe.style.color = "var(--pane-active-indicator-color)";
+      const neutral = getComputedStyle(probe).color;
       probe.remove();
       const assertMarker = () => {
         const marker = getComputedStyle(tab, "::before");
@@ -53,6 +55,16 @@ jasmine.describeWithDocumentFocus("VS Code pane presentation focus markers", () 
       presentation = container.presentPane(pane);
 
       expect(document.activeElement).toBe(input);
+      assertMarker();
+      const wasBlurred = document.body.classList.contains("is-blurred");
+      document.body.classList.add("is-blurred");
+      try {
+        expect(document.activeElement).toBe(input);
+        expect(pane.getElement().classList.contains("active")).toBeTrue();
+        expect(getComputedStyle(tab, "::before").backgroundColor).toBe(neutral);
+      } finally {
+        document.body.classList.toggle("is-blurred", wasBlurred);
+      }
       assertMarker();
       presentation.dispose();
       assertMarker();
