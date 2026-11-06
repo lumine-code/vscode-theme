@@ -2,7 +2,7 @@
   "title": "vscode-theme",
   "description": "VS Code Modern in light mode.",
   "recordedOn": "2026-11-06",
-  "sourceRevision": "2e9dec9c47de0ed870ffa3240a60b924fe5819dd",
+  "sourceRevision": "5c487fd41f7112221d51de42d81d8bddbb6ed02b",
   "themeSourceRevision": "c6043d2c8d9be9a2c7c4f371a0c2696ed269c89a",
   "mode": "normal",
   "fontSettings": "default",
@@ -29,12 +29,12 @@
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "package": {
-      "revision": "2e9dec9c47de0ed870ffa3240a60b924fe5819dd",
+      "revision": "5c487fd41f7112221d51de42d81d8bddbb6ed02b",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "vscode-theme": {
-      "revision": "2e9dec9c47de0ed870ffa3240a60b924fe5819dd",
+      "revision": "5c487fd41f7112221d51de42d81d8bddbb6ed02b",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
@@ -316,14 +316,14 @@
       "label": "VS Code Modern in light mode.",
       "width": 1200,
       "height": 760,
-      "sha256": "1502949a5e38933e543dc9db516a53e5f5de7a5262e073a2f2700792a6cc5941"
+      "sha256": "5384a943ce9ab95b7ad8f412dc51b3289742de2bd91fa4c2311c8a16e462c45d"
     },
     {
       "file": "demo-2.png",
       "label": "VS Code Modern in dark mode.",
       "width": 1200,
       "height": 760,
-      "sha256": "75dc82413681dda61d7b36769b0efbca8a98d53e15bee8d75e651a4c922aa010"
+      "sha256": "e1f735348f3f5e493d089aa2f3868a6f0acd28d9123d1787d27dd4e8908d72c3"
     }
   ]
 }
