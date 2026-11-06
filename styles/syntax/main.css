@@ -49,8 +49,8 @@ lumine-text-editor:not([mini]):not([input]) {
   }
 }
 
-/* Compose with line decorations instead of replacing their backgrounds. */
-lumine-text-editor:not([mini]):not([input]) .line.cursor-line {
+/* Compose with decorations while letting embedded editors opt out. */
+lumine-text-editor:where(:not([mini], [input])) .line.cursor-line {
   box-shadow:
     inset 0 0 0 2px var(--syntax-cursor-line-border-color),
     inset 0 0 0 100vmax var(--syntax-cursor-line-background-color);
