@@ -187,6 +187,13 @@ lumine-pane-container lumine-pane-axis.vertical > lumine-pane-resize-handle {
   }
 }
 
+/* Close only the active tab's existing content edge when its item opts in. */
+lumine-pane:has(> .item-views > [data-active-pane-item].tab-content-separated)
+  > .tab-bar:not(.icons-only)
+  > .tab.active {
+  border-bottom-color: var(--tab-bar-border-color);
+}
+
 .tab-bar .tab .close-icon,
 .dock-tab-close > .close-icon {
   width: 20px;
